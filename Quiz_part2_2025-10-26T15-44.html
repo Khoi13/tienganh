@@ -1,0 +1,637 @@
+
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz - Part 2</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9fafb;
+        }
+        .container {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          padding: 2rem;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid rgb(229 231 235);
+          padding-bottom: 1rem;
+        }
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .instructions {
+          background-color: rgb(254 249 195);
+          border: 1px solid rgb(251 191 36);
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .submit-section {
+          margin-top: 2rem;
+          text-align: center;
+          padding: 1rem;
+          background-color: rgb(249 250 251);
+          border-radius: 0.5rem;
+          border: 1px solid rgb(229 231 235);
+        }
+        .submit-btn {
+          background-color: rgb(34 197 94);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .submit-btn:hover {
+          background-color: rgb(21 128 61);
+        }
+        .reset-btn {
+          background-color: rgb(156 163 175);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: rgb(107 114 128);
+        }
+        .results {
+          margin-top: 1rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          text-align: center;
+          display: none;
+        }
+        .results.show {
+          display: block;
+        }
+        .results.passed {
+          background-color: rgb(240 253 244);
+          color: rgb(21 128 61);
+          border: 1px solid rgb(187 247 208);
+        }
+        .results.failed {
+          background-color: rgb(254 242 242);
+          color: rgb(220 38 38);
+          border: 1px solid rgb(254 202 202);
+        }
+        .detailed-feedback {
+          margin-top: 2rem;
+          text-align: left;
+        }
+        .feedback-item {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .feedback-item.correct {
+          background-color: rgb(240 253 244);
+          border: 1px solid rgb(187 247 208);
+        }
+        .feedback-item.incorrect {
+          background-color: rgb(254 242 242);
+          border: 1px solid rgb(254 202 202);
+        }
+        .option-correct {
+          color: rgb(21 128 61);
+          font-weight: 600;
+        }
+        .option-incorrect {
+          color: rgb(220 38 38);
+          text-decoration: line-through;
+        }
+        .option-normal {
+          color: rgb(55 65 81);
+        }
+        .footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgb(229 231 235);
+          text-align: center;
+          font-size: 0.875rem;
+          color: rgb(107 114 128);
+        }
+        @media (max-width: 768px) {
+          .grid-layout {
+            grid-template-columns: 1fr;
+          }
+          body {
+            padding: 10px;
+          }
+          .container {
+            padding: 1rem;
+          }
+        }
+        @media print {
+          body {
+            background-color: white;
+          }
+          .container {
+            box-shadow: none;
+          }
+          .submit-section {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="font-size: 1.875rem; font-weight: 700; color: rgb(79 70 229); margin-bottom: 0.5rem;">
+            Text2TiengAnhTHPT - Interactive Quiz
+          </h1>
+          <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+            Part 2
+          </h2>
+        </div>
+
+        <div class="instructions">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: rgb(146 64 14);">📋 Instructions</h3>
+          <p style="font-size: 0.875rem; color: rgb(146 64 14); margin: 0;">
+            • Read all questions carefully before answering<br>
+            • Choose the best answer for each question by clicking the radio button<br>
+            • Click "Submit Quiz" to see your results<br>
+            • You can reset and try again anytime
+          </p>
+        </div>
+
+        <form id="quizForm">
+          <div class="grid-layout">
+            
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+        📄 Passage with Blanks
+      </h3>
+      <div style="border: 2px solid rgb(229 231 235); background-color: rgb(255 255 255); border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); overflow: hidden;">
+        <div style="background-color: rgb(239 246 255); padding: 1rem; border-bottom: 1px solid rgb(191 219 254);">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(248 113 113); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(251 191 36); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(34 197 94); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <span style="margin-left: 0.5rem; font-size: 0.875rem; font-weight: 500; color: rgb(75 85 99);">Reading Text</span>
+          </div>
+        </div>
+        <div style="padding: 1.5rem; background-color: rgb(239 246 255);">
+          <p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">The Shenzhen-Hong Kong-Guangzhou region stands as a global beacon of innovation, having recently <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">propelled</span> China into the top ranks of the Global Innovation Index. This South China tech hub is characterized by a unique fusion of traditional life and cutting-edge technology, where innovation is not merely an industry but an <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">embedded</span> cultural element. Technology is <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">pervasive</span>, seamlessly integrated into daily routines, from street market vendors accepting QR code payments alongside handwritten signs to small businesses managing deliveries via multiple applications. This dynamic environment fosters a willingness to <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">experiment</span> and embrace new ideas. </p><p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">A prime example of this technological integration is Hong Kong's Octopus card. Initially launched in 1997 for public transport, <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">it</span> has evolved into a versatile everyday payment solution, accepted across a vast array of services, including vending machines and parking meters. Furthermore, the region showcases creative technological crossovers, such as the nightly Symphony of Lights show in Hong Kong, which synchronizes music with lights, lasers, and LED screens across numerous buildings. In spaces like PMQ, visitors can observe 3D-printing workshops operating alongside traditional calligraphy studios, illustrating the harmonious coexistence of old and new.</p><p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">Shenzhen’s transformation from a fishing village to a technological powerhouse was a deliberate governmental strategy, beginning with its designation as a Special Economic Zone in 1980. <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">This move, offering tax breaks and incentives, was designed to spur innovation and attract investment.</span> The city's status as a creative hub was further solidified by its Unesco Creative City designation in 2008, leading to the funding of various makerspaces. These <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">inclusive</span> spaces, like the Shenzhen Open Innovation Lab, provide affordable access to advanced tools, including VR setups, fostering a collaborative atmosphere for hobbyists, students, and professionals alike.</p>
+        </div>
+        <div style="background-color: rgb(249 250 251); padding: 1rem; border-top: 1px solid rgb(229 231 235); font-size: 0.75rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; color: rgb(75 85 99);">
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">highlighted</span>
+              <span>= Referenced in questions</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[I]</span>
+              <span>= Insertion points</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+            
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+                Questions:
+              </h3>
+              
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 7
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">What is a key characteristic of the Shenzhen-Hong Kong-Guangzhou region, according to paragraph 1?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="A" id="q0_A" style="margin-right: 0.5rem;">
+                <label for="q0_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Its innovation is primarily driven by academic research.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="B" id="q0_B" style="margin-right: 0.5rem;">
+                <label for="q0_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. Technology is deeply integrated into its culture and daily life.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="C" id="q0_C" style="margin-right: 0.5rem;">
+                <label for="q0_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. It is solely focused on traditional industries.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="D" id="q0_D" style="margin-right: 0.5rem;">
+                <label for="q0_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. It avoids foreign investment and partnerships.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 8
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Vocabulary Meaning</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The word '__propelled__' in paragraph 1 is closest in meaning to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="A" id="q1_A" style="margin-right: 0.5rem;">
+                <label for="q1_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. hindered</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="B" id="q1_B" style="margin-right: 0.5rem;">
+                <label for="q1_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. restricted</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="C" id="q1_C" style="margin-right: 0.5rem;">
+                <label for="q1_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. driven</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="D" id="q1_D" style="margin-right: 0.5rem;">
+                <label for="q1_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. diverted</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 9
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Vocabulary Opposite</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The word '__inclusive__' in paragraph 3 is OPPOSITE in meaning to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="A" id="q2_A" style="margin-right: 0.5rem;">
+                <label for="q2_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. selective</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="B" id="q2_B" style="margin-right: 0.5rem;">
+                <label for="q2_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. open</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="C" id="q2_C" style="margin-right: 0.5rem;">
+                <label for="q2_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. welcoming</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="D" id="q2_D" style="margin-right: 0.5rem;">
+                <label for="q2_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. diverse</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 10
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Reference</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The word '__it__' in paragraph 2 refers to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="A" id="q3_A" style="margin-right: 0.5rem;">
+                <label for="q3_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. technological integration</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="B" id="q3_B" style="margin-right: 0.5rem;">
+                <label for="q3_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. the Octopus card</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="C" id="q3_C" style="margin-right: 0.5rem;">
+                <label for="q3_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. public transport</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="D" id="q3_D" style="margin-right: 0.5rem;">
+                <label for="q3_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Hong Kong</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 11
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Paraphrase</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following best paraphrases the underlined sentence in paragraph 3? '__This move, offering tax breaks and incentives, was designed to spur innovation and attract investment.__'</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="A" id="q4_A" style="margin-right: 0.5rem;">
+                <label for="q4_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Attracting investment was the only goal of the government's tax break policy.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="B" id="q4_B" style="margin-right: 0.5rem;">
+                <label for="q4_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. Tax reductions and incentives were implemented to intentionally suppress technological advancement.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="C" id="q4_C" style="margin-right: 0.5rem;">
+                <label for="q4_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. The strategy involved providing financial encouragement to stimulate new ideas and draw in funds.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="D" id="q4_D" style="margin-right: 0.5rem;">
+                <label for="q4_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. The government's decision to offer financial benefits aimed to discourage new ideas and capital.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 12
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail (True/False)</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following is TRUE about Hong Kong's Octopus card, according to paragraph 2?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="A" id="q5_A" style="margin-right: 0.5rem;">
+                <label for="q5_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Its usage is limited to public transportation.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="B" id="q5_B" style="margin-right: 0.5rem;">
+                <label for="q5_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. It started as a transport payment, but now has wider applications.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="C" id="q5_C" style="margin-right: 0.5rem;">
+                <label for="q5_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. It is primarily used for international transactions.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="D" id="q5_D" style="margin-right: 0.5rem;">
+                <label for="q5_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. It was only recently introduced as a payment solution.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 13
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Location</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which paragraph mentions the coexistence of traditional arts and modern technology?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="A" id="q6_A" style="margin-right: 0.5rem;">
+                <label for="q6_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. None of the above</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="B" id="q6_B" style="margin-right: 0.5rem;">
+                <label for="q6_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. Paragraph 1</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="C" id="q6_C" style="margin-right: 0.5rem;">
+                <label for="q6_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. Paragraph 3</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="D" id="q6_D" style="margin-right: 0.5rem;">
+                <label for="q6_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Paragraph 2</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 14
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail or Inference</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">What was a primary factor in Shenzhen's transformation into a technological powerhouse?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="A" id="q7_A" style="margin-right: 0.5rem;">
+                <label for="q7_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. The spontaneous growth of local small businesses.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="B" id="q7_B" style="margin-right: 0.5rem;">
+                <label for="q7_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. A deliberate government strategy of economic incentives.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="C" id="q7_C" style="margin-right: 0.5rem;">
+                <label for="q7_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. Its historical isolation from global trade.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="D" id="q7_D" style="margin-right: 0.5rem;">
+                <label for="q7_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Its natural resources and fishing industry.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn">📝 Submit Quiz</button>
+            <button type="button" class="reset-btn" onclick="resetQuiz()">🔄 Reset</button>
+            <div id="results" class="results"></div>
+            <div id="detailedFeedback" class="detailed-feedback" style="display: none;"></div>
+          </div>
+        </form>
+
+        <div class="footer">
+          <p>Generated on 26/10/2025 at 22:44:52</p>
+          <p>Created by Text2TiengAnhTHPT - English Test Generator</p>
+        </div>
+      </div>
+
+      <script>
+        // Correct answers and question data
+        const correctAnswers = {"question_0": "B", "question_1": "C", "question_2": "A", "question_3": "B", "question_4": "C", "question_5": "B", "question_6": "D", "question_7": "B"};
+        const questionsData = {"question_0": {"questionNumber":7,"questionText":"What is a key characteristic of the Shenzhen-Hong Kong-Guangzhou region, according to paragraph 1?","itemType":"Detail","options":["A. Its innovation is primarily driven by academic research.","B. Technology is deeply integrated into its culture and daily life.","C. It is solely focused on traditional industries.","D. It avoids foreign investment and partnerships."],"correctAnswerLetter":"B","explanation":"Paragraph 1 states that innovation is an 'embedded cultural element' and technology is 'pervasive, seamlessly integrated into daily routines'.","explanationVI":"Đoạn 1 nêu rõ rằng đổi mới là 'yếu tố văn hóa gắn liền' và công nghệ 'phổ biến, được tích hợp liền mạch vào các hoạt động hàng ngày'."}, "question_1": {"questionNumber":8,"questionText":"The word '__propelled__' in paragraph 1 is closest in meaning to ______.","itemType":"Vocabulary Meaning","options":["A. hindered","B. restricted","C. driven","D. diverted"],"correctAnswerLetter":"C","explanation":"'Propelled' means to drive, push, or cause to move in a particular direction. 'Driven' is the closest synonym.","explanationVI":"'Propelled' có nghĩa là thúc đẩy, đẩy về phía trước. 'Driven' là từ đồng nghĩa gần nhất."}, "question_2": {"questionNumber":9,"questionText":"The word '__inclusive__' in paragraph 3 is OPPOSITE in meaning to ______.","itemType":"Vocabulary Opposite","options":["A. selective","B. open","C. welcoming","D. diverse"],"correctAnswerLetter":"A","explanation":"'Inclusive' means encompassing all, not excluding. The opposite is 'selective', meaning chosen carefully or exclusively.","explanationVI":"'Inclusive' có nghĩa là bao gồm tất cả, không loại trừ ai. Trái nghĩa với nó là 'selective', có nghĩa là có chọn lọc hoặc độc quyền."}, "question_3": {"questionNumber":10,"questionText":"The word '__it__' in paragraph 2 refers to ______.","itemType":"Reference","options":["A. technological integration","B. the Octopus card","C. public transport","D. Hong Kong"],"correctAnswerLetter":"B","explanation":"The sentence states, 'Initially launched in 1997 for public transport, it has evolved...', where 'it' refers back to 'Hong Kong's Octopus card'.","explanationVI":"Câu văn nói rằng 'Ban đầu ra mắt năm 1997 cho giao thông công cộng, nó đã phát triển...', trong đó 'it' đề cập đến 'Hong Kong's Octopus card'."}, "question_4": {"questionNumber":11,"questionText":"Which of the following best paraphrases the underlined sentence in paragraph 3? '__This move, offering tax breaks and incentives, was designed to spur innovation and attract investment.__'","itemType":"Paraphrase","options":["A. Attracting investment was the only goal of the government's tax break policy.","B. Tax reductions and incentives were implemented to intentionally suppress technological advancement.","C. The strategy involved providing financial encouragement to stimulate new ideas and draw in funds.","D. The government's decision to offer financial benefits aimed to discourage new ideas and capital."],"correctAnswerLetter":"C","explanation":"The original sentence explains that tax breaks and incentives were offered to 'spur innovation' (stimulate new ideas) and 'attract investment' (draw in funds). Option C accurately captures this meaning.","explanationVI":"Câu gốc giải thích rằng các ưu đãi thuế và khuyến khích được đưa ra để 'thúc đẩy đổi mới' (khuyến khích các ý tưởng mới) và 'thu hút đầu tư' (thu hút vốn). Lựa chọn C diễn đạt lại ý này một cách chính xác."}, "question_5": {"questionNumber":12,"questionText":"Which of the following is TRUE about Hong Kong's Octopus card, according to paragraph 2?","itemType":"Detail (True/False)","options":["A. Its usage is limited to public transportation.","B. It started as a transport payment, but now has wider applications.","C. It is primarily used for international transactions.","D. It was only recently introduced as a payment solution."],"correctAnswerLetter":"B","explanation":"Paragraph 2 states that the Octopus card 'Initially launched in 1997 for public transport, it has evolved into a versatile everyday payment solution, accepted across a vast array of services'.","explanationVI":"Đoạn 2 nói rằng thẻ Octopus 'Ban đầu ra mắt năm 1997 cho giao thông công cộng, nó đã phát triển thành một giải pháp thanh toán hàng ngày linh hoạt, được chấp nhận trên nhiều dịch vụ khác nhau'."}, "question_6": {"questionNumber":13,"questionText":"Which paragraph mentions the coexistence of traditional arts and modern technology?","itemType":"Location","options":["A. None of the above","B. Paragraph 1","C. Paragraph 3","D. Paragraph 2"],"correctAnswerLetter":"D","explanation":"Paragraph 2 refers to '3D-printing workshops operating alongside traditional calligraphy studios', illustrating the harmonious coexistence of old and new.","explanationVI":"Đoạn 2 đề cập đến 'các xưởng in 3D hoạt động bên cạnh các studio thư pháp truyền thống', minh họa sự cùng tồn tại hài hòa giữa cái cũ và cái mới."}, "question_7": {"questionNumber":14,"questionText":"What was a primary factor in Shenzhen's transformation into a technological powerhouse?","itemType":"Detail or Inference","options":["A. The spontaneous growth of local small businesses.","B. A deliberate government strategy of economic incentives.","C. Its historical isolation from global trade.","D. Its natural resources and fishing industry."],"correctAnswerLetter":"B","explanation":"Paragraph 3 explicitly states that Shenzhen's transformation 'was a deliberate governmental strategy, beginning with its designation as a Special Economic Zone in 1980', offering 'tax breaks and incentives'.","explanationVI":"Đoạn 3 nêu rõ rằng sự chuyển đổi của Thâm Quyến 'là một chiến lược chính phủ có chủ ý, bắt đầu với việc chỉ định nó là Đặc khu kinh tế vào năm 1980', cung cấp 'ưu đãi thuế và khuyến khích'."}};
+        
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          let score = 0;
+          let totalQuestions = Object.keys(correctAnswers).length;
+          let userAnswers = {};
+          
+          // Get user answers
+          for (let [key, value] of formData.entries()) {
+            userAnswers[key] = value;
+          }
+          
+          // Check answers
+          for (let questionKey in correctAnswers) {
+            if (userAnswers[questionKey] === correctAnswers[questionKey]) {
+              score++;
+            }
+          }
+          
+          // Calculate percentage
+          const percentage = Math.round((score / totalQuestions) * 100);
+          
+          // Show results summary
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = `
+            <h3>Quiz Results</h3>
+            <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+            <p>Answered questions: ${Object.keys(userAnswers).length}/${totalQuestions}</p>
+          `;
+          
+          // Style based on performance
+          resultsDiv.className = 'results show ' + (percentage >= 70 ? 'passed' : 'failed');
+          
+          // Generate detailed feedback
+          generateDetailedFeedback(userAnswers);
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate detailed feedback function
+        function generateDetailedFeedback(userAnswers) {
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          let feedbackHTML = '<h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">Detailed Feedback:</h3>';
+          
+          for (let questionKey in questionsData) {
+            const questionData = questionsData[questionKey];
+            const userAnswer = userAnswers[questionKey];
+            const correctAnswer = correctAnswers[questionKey];
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedbackHTML += `
+              <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+                  Question ${questionData.questionNumber} 
+                  ${questionData.itemType ? `<span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">${questionData.itemType}</span>` : ''}
+                  ${isCorrect ? '<span style="margin-left: 0.5rem; color: rgb(22 163 74);">✔️ Correct</span>' : '<span style="margin-left: 0.5rem; color: rgb(220 38 38);">❌ Incorrect</span>'}
+                </p>
+            `;
+            
+            // Handle Part 3 scenarios
+            if (questionKey.startsWith('scenario_')) {
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.instructions}</p>
+                <div style="margin-bottom: 1rem; border: 1px solid rgb(229 231 235); background-color: rgb(249 250 251); padding: 0.75rem; border-radius: 0.25rem;">
+                  <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+                  ${questionData.jumbledItems.map(item => `<p style="font-size: 0.875rem; color: rgb(55 65 81);">${item}</p>`).join('')}
+                </div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Your Choice:</p>
+                <div style="margin-bottom: 0.5rem;">
+                  ${Object.entries(questionData.mcqOptions).map(([letter, sequence]) => {
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (letter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (letter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${letter}. ${sequence}</p>`;
+                  }).join('')}
+                </div>
+                <p style="font-size: 0.875rem; margin-top: 0.5rem;">Correct Sequence: <span style="font-weight: 600; color: rgb(21 128 61);">${questionData.correctSequence}</span></p>
+              `;
+            } else {
+              // Handle regular MCQ questions
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.questionText}</p>
+                <div style="margin-bottom: 0.75rem;">
+                  ${questionData.options.map((option, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const displayOption = option.match(/^[A-D][.)]s*/) ? option : `${optionLetter}. ${option}`;
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (optionLetter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (optionLetter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${displayOption}</p>`;
+                  }).join('')}
+                </div>
+              `;
+            }
+            
+            // Add explanations if available
+            if (questionData.explanation) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Explanation:</strong> ${questionData.explanation}</div>`;
+            }
+            if (questionData.explanationVI) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Giải thích:</strong> ${questionData.explanationVI}</div>`;
+            }
+            
+            feedbackHTML += '</div>';
+          }
+          
+          feedbackDiv.innerHTML = feedbackHTML;
+          feedbackDiv.style.display = 'block';
+        }
+        
+        // Reset function
+        function resetQuiz() {
+          document.getElementById('quizForm').reset();
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.className = 'results';
+          resultsDiv.innerHTML = '';
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          feedbackDiv.style.display = 'none';
+          feedbackDiv.innerHTML = '';
+        }
+        
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+          const formData = new FormData(document.getElementById('quizForm'));
+          if (formData.entries().next().value) {
+            e.preventDefault();
+            e.returnValue = '';
+          }
+        });
+      </script>
+    </body>
+    </html>
+  

@@ -1,0 +1,700 @@
+
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz - Part 4</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9fafb;
+        }
+        .container {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          padding: 2rem;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid rgb(229 231 235);
+          padding-bottom: 1rem;
+        }
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .instructions {
+          background-color: rgb(254 249 195);
+          border: 1px solid rgb(251 191 36);
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .submit-section {
+          margin-top: 2rem;
+          text-align: center;
+          padding: 1rem;
+          background-color: rgb(249 250 251);
+          border-radius: 0.5rem;
+          border: 1px solid rgb(229 231 235);
+        }
+        .submit-btn {
+          background-color: rgb(34 197 94);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .submit-btn:hover {
+          background-color: rgb(21 128 61);
+        }
+        .reset-btn {
+          background-color: rgb(156 163 175);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: rgb(107 114 128);
+        }
+        .results {
+          margin-top: 1rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          text-align: center;
+          display: none;
+        }
+        .results.show {
+          display: block;
+        }
+        .results.passed {
+          background-color: rgb(240 253 244);
+          color: rgb(21 128 61);
+          border: 1px solid rgb(187 247 208);
+        }
+        .results.failed {
+          background-color: rgb(254 242 242);
+          color: rgb(220 38 38);
+          border: 1px solid rgb(254 202 202);
+        }
+        .detailed-feedback {
+          margin-top: 2rem;
+          text-align: left;
+        }
+        .feedback-item {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .feedback-item.correct {
+          background-color: rgb(240 253 244);
+          border: 1px solid rgb(187 247 208);
+        }
+        .feedback-item.incorrect {
+          background-color: rgb(254 242 242);
+          border: 1px solid rgb(254 202 202);
+        }
+        .option-correct {
+          color: rgb(21 128 61);
+          font-weight: 600;
+        }
+        .option-incorrect {
+          color: rgb(220 38 38);
+          text-decoration: line-through;
+        }
+        .option-normal {
+          color: rgb(55 65 81);
+        }
+        .footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgb(229 231 235);
+          text-align: center;
+          font-size: 0.875rem;
+          color: rgb(107 114 128);
+        }
+        @media (max-width: 768px) {
+          .grid-layout {
+            grid-template-columns: 1fr;
+          }
+          body {
+            padding: 10px;
+          }
+          .container {
+            padding: 1rem;
+          }
+        }
+        @media print {
+          body {
+            background-color: white;
+          }
+          .container {
+            box-shadow: none;
+          }
+          .submit-section {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="font-size: 1.875rem; font-weight: 700; color: rgb(79 70 229); margin-bottom: 0.5rem;">
+            Text2TiengAnhTHPT - Interactive Quiz
+          </h1>
+          <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+            Part 4
+          </h2>
+        </div>
+
+        <div class="instructions">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: rgb(146 64 14);">📋 Instructions</h3>
+          <p style="font-size: 0.875rem; color: rgb(146 64 14); margin: 0;">
+            • Read all questions carefully before answering<br>
+            • Choose the best answer for each question by clicking the radio button<br>
+            • Click "Submit Quiz" to see your results<br>
+            • You can reset and try again anytime
+          </p>
+        </div>
+
+        <form id="quizForm">
+          <div class="grid-layout">
+            
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+        📄 Passage with Blanks
+      </h3>
+      <div style="border: 2px solid rgb(229 231 235); background-color: rgb(255 255 255); border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); overflow: hidden;">
+        <div style="background-color: rgb(239 246 255); padding: 1rem; border-bottom: 1px solid rgb(191 219 254);">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(248 113 113); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(251 191 36); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(34 197 94); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <span style="margin-left: 0.5rem; font-size: 0.875rem; font-weight: 500; color: rgb(75 85 99);">Reading Text</span>
+          </div>
+        </div>
+        <div style="padding: 1.5rem; background-color: rgb(239 246 255);">
+          <p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">Silicon Valley, encompassing the San Jose-San Francisco cluster, stands as an undisputed global epicenter of technological innovation. Renowned worldwide, this region consistently leads in venture capital investment, reportedly accounting for nearly 7% of all global deals, and exhibits the most concentrated innovation activity per capita according to the Global Innovation Index (GII) report. This <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">unparalleled</span> density of capital and talent has historically propelled breakthroughs and continues to define its unique ecosystem, especially as the <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">transformative</span> potential of Artificial Intelligence (AI) now looms large. </p><p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">The magnetic pull of Silicon Valley stems from its exceptional concentration of brilliant minds and dynamic enterprises. Entrepreneurs and startup founders are drawn to this environment where innovative ideas are not just conceived but actively nurtured. Many who once departed for other opportunities now find themselves returning, driven by the palpable energy and the sheer number of like-minded individuals. <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">This creates a vibrant intellectual atmosphere, fostering a culture of intense collaboration and competition that accelerates the pace of technological development.</span> <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[I]</span> The close proximity of key players – from investors to engineers – facilitates a constant exchange of information and expertise, making the region a crucible for new ventures.</p><p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">One of the most significant advantages of this concentrated hub is the <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">unrivalled</span> networking potential. Informal gatherings, industry events, or even casual conversations can rapidly evolve into crucial connections. <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[II]</span> It is not uncommon for a startup founder to discuss a challenge at a dinner table and, moments later, receive an introduction via text message to a critical contact who would otherwise be inaccessible through conventional channels like email or social media. This <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">serendipitous</span> connectivity is a cornerstone of the Valley's success, enabling swift problem-solving and partnership formation.</p><p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">Moreover, Silicon Valley offers a unique preview of future technologies. Visitors and residents alike often gain access to cutting-edge innovations months, or even a year, before they permeate mainstream markets globally. <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">Ride-hailing services like Uber and Lyft, for example, were commonplace here long before they became international phenomena, and today, autonomous-driving Waymo cars operate with a significant market share, available through a simple app download.</span> <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[III]</span> This early adoption not only provides a testing ground for new products but also reinforces the region's reputation as the birthplace of tomorrow's trends. [IV] Ultimately, Silicon Valley's enduring appeal lies in its dynamic blend of capital, talent, and an ecosystem that continuously redefines the boundaries of what is technologically possible.</p>
+        </div>
+        <div style="background-color: rgb(249 250 251); padding: 1rem; border-top: 1px solid rgb(229 231 235); font-size: 0.75rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; color: rgb(75 85 99);">
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">highlighted</span>
+              <span>= Referenced in questions</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[I]</span>
+              <span>= Insertion points</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+            
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+                Questions:
+              </h3>
+              
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 20
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">According to the passage, what is a primary factor contributing to Silicon Valley's leadership in global innovation?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="A" id="q0_A" style="margin-right: 0.5rem;">
+                <label for="q0_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. The large number of entrepreneurs who have recently returned to the area.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="B" id="q0_B" style="margin-right: 0.5rem;">
+                <label for="q0_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. Its historical role in the original dot-com boom.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="C" id="q0_C" style="margin-right: 0.5rem;">
+                <label for="q0_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. Its focus on developing advanced autonomous driving technology.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="D" id="q0_D" style="margin-right: 0.5rem;">
+                <label for="q0_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Its high concentration of venture capital and innovation activity per capita.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 21
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Paragraph summary</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following best summarizes the main idea of paragraph 2?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="A" id="q1_A" style="margin-right: 0.5rem;">
+                <label for="q1_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Entrepreneurs are increasingly leaving Silicon Valley for more affordable locations, despite its advantages.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="B" id="q1_B" style="margin-right: 0.5rem;">
+                <label for="q1_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. The intense competition in Silicon Valley sometimes hinders the development of new ventures.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="C" id="q1_C" style="margin-right: 0.5rem;">
+                <label for="q1_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. Silicon Valley's appeal is primarily due to its historical reputation as a tech hub.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="D" id="q1_D" style="margin-right: 0.5rem;">
+                <label for="q1_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. The region's unique ecosystem is shaped by its high concentration of talent and dynamic enterprises, fostering intense collaboration and competition.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 22
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail (NOT mentioned)</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following is NOT mentioned as a characteristic contributing to Silicon Valley's unique innovation ecosystem?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="A" id="q2_A" style="margin-right: 0.5rem;">
+                <label for="q2_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Significant venture capital investment.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="B" id="q2_B" style="margin-right: 0.5rem;">
+                <label for="q2_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. High density of innovation activity per capita.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="C" id="q2_C" style="margin-right: 0.5rem;">
+                <label for="q2_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. Unrivalled networking opportunities.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="D" id="q2_D" style="margin-right: 0.5rem;">
+                <label for="q2_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Government subsidies specifically for startup development.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 23
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Vocabulary in context</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The word "__serendipitous__" in paragraph 3 is closest in meaning to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="A" id="q3_A" style="margin-right: 0.5rem;">
+                <label for="q3_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. unexpected and fortunate</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="B" id="q3_B" style="margin-right: 0.5rem;">
+                <label for="q3_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. planned and intentional</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="C" id="q3_C" style="margin-right: 0.5rem;">
+                <label for="q3_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. traditional and customary</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="D" id="q3_D" style="margin-right: 0.5rem;">
+                <label for="q3_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. difficult and challenging</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 24
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Referent</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The sentence "__This creates a vibrant intellectual atmosphere, fostering a culture of intense collaboration and competition that accelerates the pace of technological development.__" in paragraph 2 refers to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="A" id="q4_A" style="margin-right: 0.5rem;">
+                <label for="q4_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. the departure of some individuals for other opportunities</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="B" id="q4_B" style="margin-right: 0.5rem;">
+                <label for="q4_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. the palpable energy and the sheer number of like-minded individuals</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="C" id="q4_C" style="margin-right: 0.5rem;">
+                <label for="q4_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. the transformative potential of Artificial Intelligence</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="D" id="q4_D" style="margin-right: 0.5rem;">
+                <label for="q4_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. the findings of the Global Innovation Index (GII) report</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 25
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Paraphrase / closest in meaning</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following best paraphrases the underlined sentence in paragraph 4: "__Ride-hailing services like Uber and Lyft, for example, were commonplace here long before they became international phenomena, and today, autonomous-driving Waymo cars operate with a significant market share, available through a simple app download.__"</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="A" id="q5_A" style="margin-right: 0.5rem;">
+                <label for="q5_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. Uber, Lyft, and Waymo are examples of global tech companies that originated in Silicon Valley and quickly gained international recognition.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="B" id="q5_B" style="margin-right: 0.5rem;">
+                <label for="q5_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. While ride-hailing services became popular internationally, autonomous driving technology remains largely confined to Silicon Valley.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="C" id="q5_C" style="margin-right: 0.5rem;">
+                <label for="q5_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. The success of ride-hailing and autonomous vehicle services in Silicon Valley demonstrates the region's commitment to sustainable transportation solutions.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="D" id="q5_D" style="margin-right: 0.5rem;">
+                <label for="q5_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Silicon Valley residents have a unique advantage in experiencing new technologies, such as ride-hailing and autonomous cars, well before their widespread global adoption.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 26
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Detail or rhetorical function</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">The mention of "informal gatherings" and "casual conversations" in paragraph 3 primarily serves to ______.</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="A" id="q6_A" style="margin-right: 0.5rem;">
+                <label for="q6_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. illustrate the ease and spontaneity of making valuable connections in the Valley</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="B" id="q6_B" style="margin-right: 0.5rem;">
+                <label for="q6_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. suggest that most important business deals are conducted outside official settings</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="C" id="q6_C" style="margin-right: 0.5rem;">
+                <label for="q6_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. explain why traditional networking methods are ineffective in the region</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_6" value="D" id="q6_D" style="margin-right: 0.5rem;">
+                <label for="q6_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. highlight the lack of formal business structures in Silicon Valley</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 27
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Inference</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">What can be inferred about the global adoption of new technologies based on the passage?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="A" id="q7_A" style="margin-right: 0.5rem;">
+                <label for="q7_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. The process of new technology adoption worldwide is becoming increasingly rapid and uniform.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="B" id="q7_B" style="margin-right: 0.5rem;">
+                <label for="q7_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. New technologies typically emerge simultaneously across various global tech hubs.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="C" id="q7_C" style="margin-right: 0.5rem;">
+                <label for="q7_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. International markets are generally unreceptive to innovations originating in Silicon Valley.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_7" value="D" id="q7_D" style="margin-right: 0.5rem;">
+                <label for="q7_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. Silicon Valley acts as a crucial early testing ground, influencing global adoption trends.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 28
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Sentence insertion</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Where in the passage would the following sentence best fit? 
+"This seamless integration of social interaction and professional opportunity is rarely found elsewhere."</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_8" value="A" id="q8_A" style="margin-right: 0.5rem;">
+                <label for="q8_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. [III]</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_8" value="B" id="q8_B" style="margin-right: 0.5rem;">
+                <label for="q8_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. [I]</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_8" value="C" id="q8_C" style="margin-right: 0.5rem;">
+                <label for="q8_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. [II]</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_8" value="D" id="q8_D" style="margin-right: 0.5rem;">
+                <label for="q8_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. [IV]</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 29
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Overall summary</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Which of the following best summarizes the entire passage?</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_9" value="A" id="q9_A" style="margin-right: 0.5rem;">
+                <label for="q9_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. While Silicon Valley offers advanced technologies, its networking opportunities are primarily limited to formal business settings.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_9" value="B" id="q9_B" style="margin-right: 0.5rem;">
+                <label for="q9_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. Silicon Valley's historical dominance in technology is now waning due to global competition and rising costs.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_9" value="C" id="q9_C" style="margin-right: 0.5rem;">
+                <label for="q9_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. The passage highlights Silicon Valley's enduring status as a premier innovation hub, driven by its unique concentration of talent, capital, and a highly collaborative ecosystem.</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_9" value="D" id="q9_D" style="margin-right: 0.5rem;">
+                <label for="q9_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. The primary challenge for Silicon Valley is the retention of talent, as many entrepreneurs opt to leave the region.</label>
+              </div>
+            
+        </div>
+      </div>
+    
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn">📝 Submit Quiz</button>
+            <button type="button" class="reset-btn" onclick="resetQuiz()">🔄 Reset</button>
+            <div id="results" class="results"></div>
+            <div id="detailedFeedback" class="detailed-feedback" style="display: none;"></div>
+          </div>
+        </form>
+
+        <div class="footer">
+          <p>Generated on 26/10/2025 at 22:48:42</p>
+          <p>Created by Text2TiengAnhTHPT - English Test Generator</p>
+        </div>
+      </div>
+
+      <script>
+        // Correct answers and question data
+        const correctAnswers = {"question_0": "D", "question_1": "D", "question_2": "D", "question_3": "A", "question_4": "B", "question_5": "D", "question_6": "A", "question_7": "D", "question_8": "C", "question_9": "C"};
+        const questionsData = {"question_0": {"questionNumber":20,"questionText":"According to the passage, what is a primary factor contributing to Silicon Valley's leadership in global innovation?","itemType":"Detail","options":["A. The large number of entrepreneurs who have recently returned to the area.","B. Its historical role in the original dot-com boom.","C. Its focus on developing advanced autonomous driving technology.","D. Its high concentration of venture capital and innovation activity per capita."],"correctAnswerLetter":"D","explanation":"Paragraph 1 explicitly states that the region 'consistently leads in venture capital investment... and exhibits the most concentrated innovation activity per capita'.","explanationVI":"Đoạn 1 nêu rõ khu vực này 'liên tục dẫn đầu về đầu tư vốn mạo hiểm... và thể hiện hoạt động đổi mới tập trung nhất trên đầu người'."}, "question_1": {"questionNumber":21,"questionText":"Which of the following best summarizes the main idea of paragraph 2?","itemType":"Paragraph summary","options":["A. Entrepreneurs are increasingly leaving Silicon Valley for more affordable locations, despite its advantages.","B. The intense competition in Silicon Valley sometimes hinders the development of new ventures.","C. Silicon Valley's appeal is primarily due to its historical reputation as a tech hub.","D. The region's unique ecosystem is shaped by its high concentration of talent and dynamic enterprises, fostering intense collaboration and competition."],"correctAnswerLetter":"D","explanation":"Paragraph 2 focuses on how the 'exceptional concentration of brilliant minds and dynamic enterprises' creates a 'vibrant intellectual atmosphere, fostering a culture of intense collaboration and competition'.","explanationVI":"Đoạn 2 tập trung vào việc 'sự tập trung đặc biệt của những bộ óc xuất chúng và các doanh nghiệp năng động' tạo ra 'một bầu không khí trí tuệ sôi động, thúc đẩy văn hóa hợp tác và cạnh tranh mạnh mẽ'."}, "question_2": {"questionNumber":22,"questionText":"Which of the following is NOT mentioned as a characteristic contributing to Silicon Valley's unique innovation ecosystem?","itemType":"Detail (NOT mentioned)","options":["A. Significant venture capital investment.","B. High density of innovation activity per capita.","C. Unrivalled networking opportunities.","D. Government subsidies specifically for startup development."],"correctAnswerLetter":"D","explanation":"The passage mentions venture capital, innovation density, and networking opportunities, but does not refer to government subsidies.","explanationVI":"Đoạn văn đề cập đến vốn mạo hiểm, mật độ đổi mới và cơ hội kết nối mạng, nhưng không đề cập đến trợ cấp của chính phủ."}, "question_3": {"questionNumber":23,"questionText":"The word \"__serendipitous__\" in paragraph 3 is closest in meaning to ______.","itemType":"Vocabulary in context","options":["A. unexpected and fortunate","B. planned and intentional","C. traditional and customary","D. difficult and challenging"],"correctAnswerLetter":"A","explanation":"The context describes casual conversations rapidly evolving into crucial connections that would otherwise be inaccessible, suggesting an unexpected and fortunate turn of events.","explanationVI":"Ngữ cảnh mô tả các cuộc trò chuyện thông thường nhanh chóng phát triển thành các kết nối quan trọng mà nếu không sẽ không thể tiếp cận được, cho thấy một chuỗi sự kiện bất ngờ và may mắn."}, "question_4": {"questionNumber":24,"questionText":"The sentence \"__This creates a vibrant intellectual atmosphere, fostering a culture of intense collaboration and competition that accelerates the pace of technological development.__\" in paragraph 2 refers to ______.","itemType":"Referent","options":["A. the departure of some individuals for other opportunities","B. the palpable energy and the sheer number of like-minded individuals","C. the transformative potential of Artificial Intelligence","D. the findings of the Global Innovation Index (GII) report"],"correctAnswerLetter":"B","explanation":"The preceding sentence explains that people are 'driven by the palpable energy and the sheer number of like-minded individuals', and 'This' refers to the atmosphere created by that specific condition.","explanationVI":"Câu trước đó giải thích rằng mọi người 'được thúc đẩy bởi năng lượng rõ ràng và số lượng lớn những cá nhân cùng chí hướng', và 'This' (Điều này) ám chỉ bầu không khí được tạo ra bởi điều kiện cụ thể đó."}, "question_5": {"questionNumber":25,"questionText":"Which of the following best paraphrases the underlined sentence in paragraph 4: \"__Ride-hailing services like Uber and Lyft, for example, were commonplace here long before they became international phenomena, and today, autonomous-driving Waymo cars operate with a significant market share, available through a simple app download.__\"","itemType":"Paraphrase / closest in meaning","options":["A. Uber, Lyft, and Waymo are examples of global tech companies that originated in Silicon Valley and quickly gained international recognition.","B. While ride-hailing services became popular internationally, autonomous driving technology remains largely confined to Silicon Valley.","C. The success of ride-hailing and autonomous vehicle services in Silicon Valley demonstrates the region's commitment to sustainable transportation solutions.","D. Silicon Valley residents have a unique advantage in experiencing new technologies, such as ride-hailing and autonomous cars, well before their widespread global adoption."],"correctAnswerLetter":"D","explanation":"The original sentence highlights that these technologies were 'commonplace here long before they became international phenomena', meaning residents experienced them much earlier than the rest of the world.","explanationVI":"Câu gốc nhấn mạnh rằng các công nghệ này đã 'phổ biến ở đây rất lâu trước khi chúng trở thành hiện tượng quốc tế', có nghĩa là cư dân trải nghiệm chúng sớm hơn nhiều so với phần còn lại của thế giới."}, "question_6": {"questionNumber":26,"questionText":"The mention of \"informal gatherings\" and \"casual conversations\" in paragraph 3 primarily serves to ______.","itemType":"Detail or rhetorical function","options":["A. illustrate the ease and spontaneity of making valuable connections in the Valley","B. suggest that most important business deals are conducted outside official settings","C. explain why traditional networking methods are ineffective in the region","D. highlight the lack of formal business structures in Silicon Valley"],"correctAnswerLetter":"A","explanation":"These examples are used to show how easily and unexpectedly crucial connections can be made, leading to the 'serendipitous connectivity' mentioned later in the paragraph.","explanationVI":"Những ví dụ này được sử dụng để cho thấy việc tạo ra các kết nối quan trọng có thể dễ dàng và bất ngờ như thế nào, dẫn đến 'tính kết nối ngẫu nhiên' được đề cập sau đó trong đoạn văn."}, "question_7": {"questionNumber":27,"questionText":"What can be inferred about the global adoption of new technologies based on the passage?","itemType":"Inference","options":["A. The process of new technology adoption worldwide is becoming increasingly rapid and uniform.","B. New technologies typically emerge simultaneously across various global tech hubs.","C. International markets are generally unreceptive to innovations originating in Silicon Valley.","D. Silicon Valley acts as a crucial early testing ground, influencing global adoption trends."],"correctAnswerLetter":"D","explanation":"Paragraph 4 states that 'Visitors and residents alike often gain access to cutting-edge innovations months, or even a year, before they permeate mainstream markets globally,' and that 'This early adoption not only provides a testing ground for new products but also reinforces the region's reputation as the birthplace of tomorrow's trends.' This implies its role in influencing global adoption.","explanationVI":"Đoạn 4 nói rằng 'Du khách và cư dân đều thường xuyên tiếp cận các đổi mới tiên tiến hàng tháng, hoặc thậm chí một năm, trước khi chúng thâm nhập vào thị trường chính thống toàn cầu,' và 'Sự chấp nhận sớm này không chỉ cung cấp một nền tảng thử nghiệm cho các sản phẩm mới mà còn củng cố danh tiếng của khu vực như là nơi khai sinh của các xu hướng tương lai.' Điều này ngụ ý vai trò của nó trong việc ảnh hưởng đến sự chấp nhận toàn cầu."}, "question_8": {"questionNumber":28,"questionText":"Where in the passage would the following sentence best fit? \n\"This seamless integration of social interaction and professional opportunity is rarely found elsewhere.\"","itemType":"Sentence insertion","options":["A. [III]","B. [I]","C. [II]","D. [IV]"],"correctAnswerLetter":"C","explanation":"The sentence emphasizes the unique nature of the networking described in the preceding sentences of paragraph 3, specifically the way informal interactions lead to professional opportunities. Placing it at [II] provides a smooth transition between the general statement about networking potential and the specific example.","explanationVI":"Câu này nhấn mạnh tính độc đáo của việc kết nối mạng được mô tả trong các câu trước đó của đoạn 3, đặc biệt là cách các tương tác không chính thức dẫn đến cơ hội nghề nghiệp. Đặt nó ở [II] tạo ra sự chuyển tiếp mượt mà giữa tuyên bố chung về tiềm năng kết nối mạng và ví dụ cụ thể."}, "question_9": {"questionNumber":29,"questionText":"Which of the following best summarizes the entire passage?","itemType":"Overall summary","options":["A. While Silicon Valley offers advanced technologies, its networking opportunities are primarily limited to formal business settings.","B. Silicon Valley's historical dominance in technology is now waning due to global competition and rising costs.","C. The passage highlights Silicon Valley's enduring status as a premier innovation hub, driven by its unique concentration of talent, capital, and a highly collaborative ecosystem.","D. The primary challenge for Silicon Valley is the retention of talent, as many entrepreneurs opt to leave the region."],"correctAnswerLetter":"C","explanation":"The passage consistently portrays Silicon Valley as a leading innovation hub, detailing how its concentration of talent and capital, coupled with its collaborative environment, drives its continued success and influence.","explanationVI":"Đoạn văn liên tục khắc họa Thung lũng Silicon là một trung tâm đổi mới hàng đầu, nêu chi tiết cách sự tập trung của nhân tài và vốn, cùng với môi trường hợp tác, thúc đẩy sự thành công và ảnh hưởng liên tục của nó."}};
+        
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          let score = 0;
+          let totalQuestions = Object.keys(correctAnswers).length;
+          let userAnswers = {};
+          
+          // Get user answers
+          for (let [key, value] of formData.entries()) {
+            userAnswers[key] = value;
+          }
+          
+          // Check answers
+          for (let questionKey in correctAnswers) {
+            if (userAnswers[questionKey] === correctAnswers[questionKey]) {
+              score++;
+            }
+          }
+          
+          // Calculate percentage
+          const percentage = Math.round((score / totalQuestions) * 100);
+          
+          // Show results summary
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = `
+            <h3>Quiz Results</h3>
+            <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+            <p>Answered questions: ${Object.keys(userAnswers).length}/${totalQuestions}</p>
+          `;
+          
+          // Style based on performance
+          resultsDiv.className = 'results show ' + (percentage >= 70 ? 'passed' : 'failed');
+          
+          // Generate detailed feedback
+          generateDetailedFeedback(userAnswers);
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate detailed feedback function
+        function generateDetailedFeedback(userAnswers) {
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          let feedbackHTML = '<h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">Detailed Feedback:</h3>';
+          
+          for (let questionKey in questionsData) {
+            const questionData = questionsData[questionKey];
+            const userAnswer = userAnswers[questionKey];
+            const correctAnswer = correctAnswers[questionKey];
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedbackHTML += `
+              <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+                  Question ${questionData.questionNumber} 
+                  ${questionData.itemType ? `<span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">${questionData.itemType}</span>` : ''}
+                  ${isCorrect ? '<span style="margin-left: 0.5rem; color: rgb(22 163 74);">✔️ Correct</span>' : '<span style="margin-left: 0.5rem; color: rgb(220 38 38);">❌ Incorrect</span>'}
+                </p>
+            `;
+            
+            // Handle Part 3 scenarios
+            if (questionKey.startsWith('scenario_')) {
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.instructions}</p>
+                <div style="margin-bottom: 1rem; border: 1px solid rgb(229 231 235); background-color: rgb(249 250 251); padding: 0.75rem; border-radius: 0.25rem;">
+                  <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+                  ${questionData.jumbledItems.map(item => `<p style="font-size: 0.875rem; color: rgb(55 65 81);">${item}</p>`).join('')}
+                </div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Your Choice:</p>
+                <div style="margin-bottom: 0.5rem;">
+                  ${Object.entries(questionData.mcqOptions).map(([letter, sequence]) => {
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (letter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (letter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${letter}. ${sequence}</p>`;
+                  }).join('')}
+                </div>
+                <p style="font-size: 0.875rem; margin-top: 0.5rem;">Correct Sequence: <span style="font-weight: 600; color: rgb(21 128 61);">${questionData.correctSequence}</span></p>
+              `;
+            } else {
+              // Handle regular MCQ questions
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.questionText}</p>
+                <div style="margin-bottom: 0.75rem;">
+                  ${questionData.options.map((option, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const displayOption = option.match(/^[A-D][.)]s*/) ? option : `${optionLetter}. ${option}`;
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (optionLetter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (optionLetter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${displayOption}</p>`;
+                  }).join('')}
+                </div>
+              `;
+            }
+            
+            // Add explanations if available
+            if (questionData.explanation) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Explanation:</strong> ${questionData.explanation}</div>`;
+            }
+            if (questionData.explanationVI) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Giải thích:</strong> ${questionData.explanationVI}</div>`;
+            }
+            
+            feedbackHTML += '</div>';
+          }
+          
+          feedbackDiv.innerHTML = feedbackHTML;
+          feedbackDiv.style.display = 'block';
+        }
+        
+        // Reset function
+        function resetQuiz() {
+          document.getElementById('quizForm').reset();
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.className = 'results';
+          resultsDiv.innerHTML = '';
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          feedbackDiv.style.display = 'none';
+          feedbackDiv.innerHTML = '';
+        }
+        
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+          const formData = new FormData(document.getElementById('quizForm'));
+          if (formData.entries().next().value) {
+            e.preventDefault();
+            e.returnValue = '';
+          }
+        });
+      </script>
+    </body>
+    </html>
+  

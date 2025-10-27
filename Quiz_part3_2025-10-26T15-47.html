@@ -1,0 +1,538 @@
+
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz - Part 3</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9fafb;
+        }
+        .container {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          padding: 2rem;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid rgb(229 231 235);
+          padding-bottom: 1rem;
+        }
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .instructions {
+          background-color: rgb(254 249 195);
+          border: 1px solid rgb(251 191 36);
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .submit-section {
+          margin-top: 2rem;
+          text-align: center;
+          padding: 1rem;
+          background-color: rgb(249 250 251);
+          border-radius: 0.5rem;
+          border: 1px solid rgb(229 231 235);
+        }
+        .submit-btn {
+          background-color: rgb(34 197 94);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .submit-btn:hover {
+          background-color: rgb(21 128 61);
+        }
+        .reset-btn {
+          background-color: rgb(156 163 175);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: rgb(107 114 128);
+        }
+        .results {
+          margin-top: 1rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          text-align: center;
+          display: none;
+        }
+        .results.show {
+          display: block;
+        }
+        .results.passed {
+          background-color: rgb(240 253 244);
+          color: rgb(21 128 61);
+          border: 1px solid rgb(187 247 208);
+        }
+        .results.failed {
+          background-color: rgb(254 242 242);
+          color: rgb(220 38 38);
+          border: 1px solid rgb(254 202 202);
+        }
+        .detailed-feedback {
+          margin-top: 2rem;
+          text-align: left;
+        }
+        .feedback-item {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .feedback-item.correct {
+          background-color: rgb(240 253 244);
+          border: 1px solid rgb(187 247 208);
+        }
+        .feedback-item.incorrect {
+          background-color: rgb(254 242 242);
+          border: 1px solid rgb(254 202 202);
+        }
+        .option-correct {
+          color: rgb(21 128 61);
+          font-weight: 600;
+        }
+        .option-incorrect {
+          color: rgb(220 38 38);
+          text-decoration: line-through;
+        }
+        .option-normal {
+          color: rgb(55 65 81);
+        }
+        .footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgb(229 231 235);
+          text-align: center;
+          font-size: 0.875rem;
+          color: rgb(107 114 128);
+        }
+        @media (max-width: 768px) {
+          .grid-layout {
+            grid-template-columns: 1fr;
+          }
+          body {
+            padding: 10px;
+          }
+          .container {
+            padding: 1rem;
+          }
+        }
+        @media print {
+          body {
+            background-color: white;
+          }
+          .container {
+            box-shadow: none;
+          }
+          .submit-section {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="font-size: 1.875rem; font-weight: 700; color: rgb(79 70 229); margin-bottom: 0.5rem;">
+            Text2TiengAnhTHPT - Interactive Quiz
+          </h1>
+          <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+            Part 3
+          </h2>
+        </div>
+
+        <div class="instructions">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: rgb(146 64 14);">📋 Instructions</h3>
+          <p style="font-size: 0.875rem; color: rgb(146 64 14); margin: 0;">
+            • Read all questions carefully before answering<br>
+            • Choose the best answer for each question by clicking the radio button<br>
+            • Click "Submit Quiz" to see your results<br>
+            • You can reset and try again anytime
+          </p>
+        </div>
+
+        <form id="quizForm">
+          <div class="">
+            
+            
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+                Questions:
+              </h3>
+              
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 15
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Personal experience paragraph</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Arrange the following sentences/utterances to make a meaningful exchange/text.</p>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+          <p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">a. For instance, my train card seamlessly worked for both subway rides and quick purchases at vending machines.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">b. It was a clear demonstration that true innovation often lies in simplifying everyday tasks, not just in grand, flashy inventions.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">c. I recently visited Tokyo and was immediately struck by how technology is integrated into daily life.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">d. This small convenience made navigating the city surprisingly effortless and enjoyable.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">e. Unlike the futuristic visions often portrayed, the innovations there felt incredibly practical and user-friendly.</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Choose the correct sequence:</p>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_0" value="A" id="s0_A" style="margin-right: 0.5rem;">
+              <label for="s0_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. c-a-e-d-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_0" value="B" id="s0_B" style="margin-right: 0.5rem;">
+              <label for="s0_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. e-c-a-d-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_0" value="C" id="s0_C" style="margin-right: 0.5rem;">
+              <label for="s0_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. c-e-a-d-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_0" value="D" id="s0_D" style="margin-right: 0.5rem;">
+              <label for="s0_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. c-e-d-a-b</label>
+            </div>
+          
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 16
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Daily-life conversation</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Arrange the following sentences/utterances to make a meaningful exchange/text.</p>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+          <p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">a. Chloe: That sounds incredibly convenient. I wish we had more of those 'small but mighty' innovations here.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">b. Liam: Exactly! It makes you realize how much impact simple, human-centric tech can have on daily life.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">c. Liam: Hey, I just got back from Tokyo, and their everyday tech is amazing!</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">d. Liam: It wasn't the flashy stuff, but things like their train card that also pays for buses and vending machines. So practical!</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">e. Chloe: Oh really? What impressed you the most?</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Choose the correct sequence:</p>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_1" value="A" id="s1_A" style="margin-right: 0.5rem;">
+              <label for="s1_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. c-e-a-d-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_1" value="B" id="s1_B" style="margin-right: 0.5rem;">
+              <label for="s1_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. c-e-d-a-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_1" value="C" id="s1_C" style="margin-right: 0.5rem;">
+              <label for="s1_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. e-c-d-a-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_1" value="D" id="s1_D" style="margin-right: 0.5rem;">
+              <label for="s1_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. c-d-e-a-b</label>
+            </div>
+          
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 17
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Urban development or factual report</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Arrange the following sentences/utterances to make a meaningful exchange/text.</p>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+          <p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">a. Consequently, the city fosters an environment where technology is seen not as a distant future, but as an integral, helpful part of the present.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">b. The Tokyo-Yokohama cluster is globally recognized for its significant contributions to international patent filings, showcasing its robust innovative capacity.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">c. Such widespread adoption of 'small but mighty' tech solutions significantly improves urban functionality and the overall quality of life.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">d. These range from multi-functional transit cards to advanced AI sensors in retail, designed to enhance convenience and efficiency for residents.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">e. However, what truly distinguishes its technological landscape is the pervasive integration of practical, human-centric innovations into daily urban life.</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Choose the correct sequence:</p>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_2" value="A" id="s2_A" style="margin-right: 0.5rem;">
+              <label for="s2_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. e-b-d-c-a</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_2" value="B" id="s2_B" style="margin-right: 0.5rem;">
+              <label for="s2_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. b-e-c-d-a</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_2" value="C" id="s2_C" style="margin-right: 0.5rem;">
+              <label for="s2_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. b-d-e-c-a</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_2" value="D" id="s2_D" style="margin-right: 0.5rem;">
+              <label for="s2_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. b-e-d-c-a</label>
+            </div>
+          
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 18
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Simple directional or functional exchange</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Arrange the following sentences/utterances to make a meaningful exchange/text.</p>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+          <p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">a. Mark: Oh, it's quite famous! You can take the Yurikamome Line to the Odaiba area; it's near the waterfront.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">b. Sarah: Great, thanks for the tip! I'm really curious to see that automated check-in.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">c. Sarah: Excuse me, I heard about the Henn Na Hotel in Tokyo with robotic staff. How do I find it?</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Choose the correct sequence:</p>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_3" value="A" id="s3_A" style="margin-right: 0.5rem;">
+              <label for="s3_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. a-c-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_3" value="B" id="s3_B" style="margin-right: 0.5rem;">
+              <label for="s3_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. b-a-c</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_3" value="C" id="s3_C" style="margin-right: 0.5rem;">
+              <label for="s3_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. c-a-b</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_3" value="D" id="s3_D" style="margin-right: 0.5rem;">
+              <label for="s3_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. c-b-a</label>
+            </div>
+          
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 19
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Formal notification or business letter body</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Arrange the following sentences/utterances to make a meaningful exchange/text.</p>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+          <p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">a. Please note that the previous magnetic stripe cards will be phased out by the end of next month to ensure system uniformity.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">b. This enhancement allows for a single card to be used seamlessly for train, bus, and vending machine payments, mirroring advanced urban integration.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">c. We are pleased to announce the implementation of an upgraded 'SmartTravel Card' system across all public transport networks and affiliated retail partners.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">d. We believe this initiative will significantly streamline daily commutes and transactions, reflecting our commitment to practical, user-centric innovation.</p><p style="padding: 0.5rem; background-color: rgb(249 250 251); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(31 41 55); margin-bottom: 0.5rem;">e. All current cardholders are advised to visit any transit office to update their existing cards or obtain a new one free of charge.</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Choose the correct sequence:</p>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_4" value="A" id="s4_A" style="margin-right: 0.5rem;">
+              <label for="s4_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. c-b-e-a-d</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_4" value="B" id="s4_B" style="margin-right: 0.5rem;">
+              <label for="s4_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. c-b-a-e-d</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_4" value="C" id="s4_C" style="margin-right: 0.5rem;">
+              <label for="s4_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. b-c-e-a-d</label>
+            </div>
+          
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+              <input type="radio" name="scenario_4" value="D" id="s4_D" style="margin-right: 0.5rem;">
+              <label for="s4_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. c-e-b-a-d</label>
+            </div>
+          
+        </div>
+      </div>
+    
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn">📝 Submit Quiz</button>
+            <button type="button" class="reset-btn" onclick="resetQuiz()">🔄 Reset</button>
+            <div id="results" class="results"></div>
+            <div id="detailedFeedback" class="detailed-feedback" style="display: none;"></div>
+          </div>
+        </form>
+
+        <div class="footer">
+          <p>Generated on 26/10/2025 at 22:47:00</p>
+          <p>Created by Text2TiengAnhTHPT - English Test Generator</p>
+        </div>
+      </div>
+
+      <script>
+        // Correct answers and question data
+        const correctAnswers = {"scenario_0": "C", "scenario_1": "B", "scenario_2": "D", "scenario_3": "C", "scenario_4": "A"};
+        const questionsData = {"scenario_0": {"questionNumber":15,"type":"Personal experience paragraph","instructions":"Arrange the following sentences/utterances to make a meaningful exchange/text.","jumbledItems":["a. For instance, my train card seamlessly worked for both subway rides and quick purchases at vending machines.","b. It was a clear demonstration that true innovation often lies in simplifying everyday tasks, not just in grand, flashy inventions.","c. I recently visited Tokyo and was immediately struck by how technology is integrated into daily life.","d. This small convenience made navigating the city surprisingly effortless and enjoyable.","e. Unlike the futuristic visions often portrayed, the innovations there felt incredibly practical and user-friendly."],"mcqOptions":{"A":"c-a-e-d-b","B":"e-c-a-d-b","C":"c-e-a-d-b","D":"c-e-d-a-b"},"correctAnswerLetter":"C","correctSequence":"c-e-a-d-b","explanation":"Sentence c introduces the topic of visiting Tokyo and observing its technology. Sentence e elaborates on this observation, specifying the practical nature of the tech. Sentence a provides a specific example ('For instance') of this practical tech. Sentence d describes the positive outcome of this convenience. Finally, sentence b offers a concluding reflection on the nature of true innovation, summarizing the experience.","explanationVI":"Câu c giới thiệu chủ đề chuyến thăm Tokyo và sự tích hợp công nghệ. Câu e làm rõ quan sát này, nhấn mạnh tính thực tế của công nghệ. Câu a đưa ra một ví dụ cụ thể ('For instance') về công nghệ thực tế này. Câu d mô tả kết quả tích cực của sự tiện lợi này. Cuối cùng, câu b đưa ra một suy ngẫm kết luận về bản chất của sự đổi mới thực sự, tổng kết trải nghiệm."}, "scenario_1": {"questionNumber":16,"type":"Daily-life conversation","instructions":"Arrange the following sentences/utterances to make a meaningful exchange/text.","jumbledItems":["a. Chloe: That sounds incredibly convenient. I wish we had more of those 'small but mighty' innovations here.","b. Liam: Exactly! It makes you realize how much impact simple, human-centric tech can have on daily life.","c. Liam: Hey, I just got back from Tokyo, and their everyday tech is amazing!","d. Liam: It wasn't the flashy stuff, but things like their train card that also pays for buses and vending machines. So practical!","e. Chloe: Oh really? What impressed you the most?"],"mcqOptions":{"A":"c-e-a-d-b","B":"c-e-d-a-b","C":"e-c-d-a-b","D":"c-d-e-a-b"},"correctAnswerLetter":"B","correctSequence":"c-e-d-a-b","explanation":"Liam initiates the conversation (c) about Tokyo's tech. Chloe then asks for details (e). Liam provides a specific example (d) of the practical tech. Chloe responds with appreciation and a wish (a). Liam concludes by agreeing and reflecting on the broader impact (b).","explanationVI":"Liam bắt đầu cuộc trò chuyện (c) về công nghệ của Tokyo. Chloe sau đó hỏi chi tiết (e). Liam đưa ra một ví dụ cụ thể (d) về công nghệ thực tế. Chloe đáp lại bằng sự đánh giá cao và một mong muốn (a). Liam kết luận bằng cách đồng ý và suy ngẫm về tác động rộng lớn hơn (b)."}, "scenario_2": {"questionNumber":17,"type":"Urban development or factual report","instructions":"Arrange the following sentences/utterances to make a meaningful exchange/text.","jumbledItems":["a. Consequently, the city fosters an environment where technology is seen not as a distant future, but as an integral, helpful part of the present.","b. The Tokyo-Yokohama cluster is globally recognized for its significant contributions to international patent filings, showcasing its robust innovative capacity.","c. Such widespread adoption of 'small but mighty' tech solutions significantly improves urban functionality and the overall quality of life.","d. These range from multi-functional transit cards to advanced AI sensors in retail, designed to enhance convenience and efficiency for residents.","e. However, what truly distinguishes its technological landscape is the pervasive integration of practical, human-centric innovations into daily urban life."],"mcqOptions":{"A":"e-b-d-c-a","B":"b-e-c-d-a","C":"b-d-e-c-a","D":"b-e-d-c-a"},"correctAnswerLetter":"D","correctSequence":"b-e-d-c-a","explanation":"Sentence b introduces the Tokyo-Yokohama cluster's global recognition for innovation. Sentence e then presents a contrasting yet distinguishing feature ('However, what truly distinguishes...'). Sentence d provides specific examples ('These range from...') of the innovations mentioned in e. Sentence c describes the positive impact ('Such widespread adoption...') of these solutions. Finally, sentence a concludes with the broader consequence ('Consequently...') of this technological environment.","explanationVI":"Câu b giới thiệu sự công nhận toàn cầu của cụm Tokyo-Yokohama về đổi mới. Câu e sau đó trình bày một đặc điểm tương phản nhưng nổi bật ('However, what truly distinguishes...'). Câu d cung cấp các ví dụ cụ thể ('These range from...') về những đổi mới được đề cập trong e. Câu c mô tả tác động tích cực ('Such widespread adoption...') của các giải pháp này. Cuối cùng, câu a kết luận với hậu quả rộng lớn hơn ('Consequently...') của môi trường công nghệ này."}, "scenario_3": {"questionNumber":18,"type":"Simple directional or functional exchange","instructions":"Arrange the following sentences/utterances to make a meaningful exchange/text.","jumbledItems":["a. Mark: Oh, it's quite famous! You can take the Yurikamome Line to the Odaiba area; it's near the waterfront.","b. Sarah: Great, thanks for the tip! I'm really curious to see that automated check-in.","c. Sarah: Excuse me, I heard about the Henn Na Hotel in Tokyo with robotic staff. How do I find it?"],"mcqOptions":{"A":"a-c-b","B":"b-a-c","C":"c-a-b","D":"c-b-a"},"correctAnswerLetter":"C","correctSequence":"c-a-b","explanation":"Sarah initiates the conversation by asking for directions to the Henn Na Hotel (c). Mark then provides the directions (a). Sarah acknowledges the help and expresses her excitement (b).","explanationVI":"Sarah bắt đầu cuộc trò chuyện bằng cách hỏi đường đến khách sạn Henn Na (c). Mark sau đó cung cấp hướng dẫn (a). Sarah ghi nhận sự giúp đỡ và bày tỏ sự thích thú (b)."}, "scenario_4": {"questionNumber":19,"type":"Formal notification or business letter body","instructions":"Arrange the following sentences/utterances to make a meaningful exchange/text.","jumbledItems":["a. Please note that the previous magnetic stripe cards will be phased out by the end of next month to ensure system uniformity.","b. This enhancement allows for a single card to be used seamlessly for train, bus, and vending machine payments, mirroring advanced urban integration.","c. We are pleased to announce the implementation of an upgraded 'SmartTravel Card' system across all public transport networks and affiliated retail partners.","d. We believe this initiative will significantly streamline daily commutes and transactions, reflecting our commitment to practical, user-centric innovation.","e. All current cardholders are advised to visit any transit office to update their existing cards or obtain a new one free of charge."],"mcqOptions":{"A":"c-b-e-a-d","B":"c-b-a-e-d","C":"b-c-e-a-d","D":"c-e-b-a-d"},"correctAnswerLetter":"A","correctSequence":"c-b-e-a-d","explanation":"Sentence c serves as the initial announcement. Sentence b explains the benefits of this enhancement. Sentence e provides instructions for cardholders. Sentence a adds an important note about the phasing out of old cards. Finally, sentence d concludes with a statement about the expected positive impact and the company's commitment.","explanationVI":"Câu c là thông báo ban đầu. Câu b giải thích lợi ích của cải tiến này. Câu e cung cấp hướng dẫn cho chủ thẻ. Câu a bổ sung một lưu ý quan trọng về việc ngừng sử dụng thẻ cũ. Cuối cùng, câu d kết thúc bằng một tuyên bố về tác động tích cực dự kiến và cam kết của công ty."}};
+        
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          let score = 0;
+          let totalQuestions = Object.keys(correctAnswers).length;
+          let userAnswers = {};
+          
+          // Get user answers
+          for (let [key, value] of formData.entries()) {
+            userAnswers[key] = value;
+          }
+          
+          // Check answers
+          for (let questionKey in correctAnswers) {
+            if (userAnswers[questionKey] === correctAnswers[questionKey]) {
+              score++;
+            }
+          }
+          
+          // Calculate percentage
+          const percentage = Math.round((score / totalQuestions) * 100);
+          
+          // Show results summary
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = `
+            <h3>Quiz Results</h3>
+            <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+            <p>Answered questions: ${Object.keys(userAnswers).length}/${totalQuestions}</p>
+          `;
+          
+          // Style based on performance
+          resultsDiv.className = 'results show ' + (percentage >= 70 ? 'passed' : 'failed');
+          
+          // Generate detailed feedback
+          generateDetailedFeedback(userAnswers);
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate detailed feedback function
+        function generateDetailedFeedback(userAnswers) {
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          let feedbackHTML = '<h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">Detailed Feedback:</h3>';
+          
+          for (let questionKey in questionsData) {
+            const questionData = questionsData[questionKey];
+            const userAnswer = userAnswers[questionKey];
+            const correctAnswer = correctAnswers[questionKey];
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedbackHTML += `
+              <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+                  Question ${questionData.questionNumber} 
+                  ${questionData.itemType ? `<span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">${questionData.itemType}</span>` : ''}
+                  ${isCorrect ? '<span style="margin-left: 0.5rem; color: rgb(22 163 74);">✔️ Correct</span>' : '<span style="margin-left: 0.5rem; color: rgb(220 38 38);">❌ Incorrect</span>'}
+                </p>
+            `;
+            
+            // Handle Part 3 scenarios
+            if (questionKey.startsWith('scenario_')) {
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.instructions}</p>
+                <div style="margin-bottom: 1rem; border: 1px solid rgb(229 231 235); background-color: rgb(249 250 251); padding: 0.75rem; border-radius: 0.25rem;">
+                  <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+                  ${questionData.jumbledItems.map(item => `<p style="font-size: 0.875rem; color: rgb(55 65 81);">${item}</p>`).join('')}
+                </div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Your Choice:</p>
+                <div style="margin-bottom: 0.5rem;">
+                  ${Object.entries(questionData.mcqOptions).map(([letter, sequence]) => {
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (letter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (letter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${letter}. ${sequence}</p>`;
+                  }).join('')}
+                </div>
+                <p style="font-size: 0.875rem; margin-top: 0.5rem;">Correct Sequence: <span style="font-weight: 600; color: rgb(21 128 61);">${questionData.correctSequence}</span></p>
+              `;
+            } else {
+              // Handle regular MCQ questions
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.questionText}</p>
+                <div style="margin-bottom: 0.75rem;">
+                  ${questionData.options.map((option, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const displayOption = option.match(/^[A-D][.)]s*/) ? option : `${optionLetter}. ${option}`;
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (optionLetter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (optionLetter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${displayOption}</p>`;
+                  }).join('')}
+                </div>
+              `;
+            }
+            
+            // Add explanations if available
+            if (questionData.explanation) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Explanation:</strong> ${questionData.explanation}</div>`;
+            }
+            if (questionData.explanationVI) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Giải thích:</strong> ${questionData.explanationVI}</div>`;
+            }
+            
+            feedbackHTML += '</div>';
+          }
+          
+          feedbackDiv.innerHTML = feedbackHTML;
+          feedbackDiv.style.display = 'block';
+        }
+        
+        // Reset function
+        function resetQuiz() {
+          document.getElementById('quizForm').reset();
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.className = 'results';
+          resultsDiv.innerHTML = '';
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          feedbackDiv.style.display = 'none';
+          feedbackDiv.innerHTML = '';
+        }
+        
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+          const formData = new FormData(document.getElementById('quizForm'));
+          if (formData.entries().next().value) {
+            e.preventDefault();
+            e.returnValue = '';
+          }
+        });
+      </script>
+    </body>
+    </html>
+  

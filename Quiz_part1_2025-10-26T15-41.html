@@ -1,0 +1,575 @@
+
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz - Part 1</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9fafb;
+        }
+        .container {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          padding: 2rem;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid rgb(229 231 235);
+          padding-bottom: 1rem;
+        }
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .instructions {
+          background-color: rgb(254 249 195);
+          border: 1px solid rgb(251 191 36);
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .submit-section {
+          margin-top: 2rem;
+          text-align: center;
+          padding: 1rem;
+          background-color: rgb(249 250 251);
+          border-radius: 0.5rem;
+          border: 1px solid rgb(229 231 235);
+        }
+        .submit-btn {
+          background-color: rgb(34 197 94);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .submit-btn:hover {
+          background-color: rgb(21 128 61);
+        }
+        .reset-btn {
+          background-color: rgb(156 163 175);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: rgb(107 114 128);
+        }
+        .results {
+          margin-top: 1rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          text-align: center;
+          display: none;
+        }
+        .results.show {
+          display: block;
+        }
+        .results.passed {
+          background-color: rgb(240 253 244);
+          color: rgb(21 128 61);
+          border: 1px solid rgb(187 247 208);
+        }
+        .results.failed {
+          background-color: rgb(254 242 242);
+          color: rgb(220 38 38);
+          border: 1px solid rgb(254 202 202);
+        }
+        .detailed-feedback {
+          margin-top: 2rem;
+          text-align: left;
+        }
+        .feedback-item {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .feedback-item.correct {
+          background-color: rgb(240 253 244);
+          border: 1px solid rgb(187 247 208);
+        }
+        .feedback-item.incorrect {
+          background-color: rgb(254 242 242);
+          border: 1px solid rgb(254 202 202);
+        }
+        .option-correct {
+          color: rgb(21 128 61);
+          font-weight: 600;
+        }
+        .option-incorrect {
+          color: rgb(220 38 38);
+          text-decoration: line-through;
+        }
+        .option-normal {
+          color: rgb(55 65 81);
+        }
+        .footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgb(229 231 235);
+          text-align: center;
+          font-size: 0.875rem;
+          color: rgb(107 114 128);
+        }
+        @media (max-width: 768px) {
+          .grid-layout {
+            grid-template-columns: 1fr;
+          }
+          body {
+            padding: 10px;
+          }
+          .container {
+            padding: 1rem;
+          }
+        }
+        @media print {
+          body {
+            background-color: white;
+          }
+          .container {
+            box-shadow: none;
+          }
+          .submit-section {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="font-size: 1.875rem; font-weight: 700; color: rgb(79 70 229); margin-bottom: 0.5rem;">
+            Text2TiengAnhTHPT - Interactive Quiz
+          </h1>
+          <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+            Part 1
+          </h2>
+        </div>
+
+        <div class="instructions">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: rgb(146 64 14);">📋 Instructions</h3>
+          <p style="font-size: 0.875rem; color: rgb(146 64 14); margin: 0;">
+            • Read all questions carefully before answering<br>
+            • Choose the best answer for each question by clicking the radio button<br>
+            • Click "Submit Quiz" to see your results<br>
+            • You can reset and try again anytime
+          </p>
+        </div>
+
+        <form id="quizForm">
+          <div class="grid-layout">
+            
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+        📄 Passage with Blanks
+      </h3>
+      <div style="border: 2px solid rgb(229 231 235); background-color: rgb(255 255 255); border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); overflow: hidden;">
+        <div style="background-color: rgb(239 246 255); padding: 1rem; border-bottom: 1px solid rgb(191 219 254);">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(248 113 113); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(251 191 36); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(34 197 94); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <span style="margin-left: 0.5rem; font-size: 0.875rem; font-weight: 500; color: rgb(75 85 99);">Reading Text</span>
+          </div>
+        </div>
+        <div style="padding: 1.5rem; background-color: rgb(239 246 255);">
+          <p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">The concept of 'smart cities' has gained significant prominence, representing urban areas (1) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> leverage cutting-edge technology to enhance the quality of life for their residents. Driven by rapid advancements in fields like artificial intelligence and sustainable energy, these cities are at the forefront of global innovation. Organizations such as the World Intellectual Property Organization (WIPO) annually publish indices, like the Global Innovation Index, to (2) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> and rank these leading urban clusters based on various criteria, including technological adoption and investment patterns. Living in such environments offers a unique glimpse (3) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> the future, where seamless connectivity and efficient services become the norm. Residents often find themselves benefiting (4) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> innovative solutions that streamline daily tasks and improve infrastructure. For visitors, exploring these hubs provides an unparalleled opportunity to experience groundbreaking ideas (5) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> they become widespread. Ultimately, smart cities are not just about technology; they aim (6) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> create more livable and sustainable communities for everyone.</p>
+        </div>
+        <div style="background-color: rgb(249 250 251); padding: 1rem; border-top: 1px solid rgb(229 231 235); font-size: 0.75rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; color: rgb(75 85 99);">
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">highlighted</span>
+              <span>= Referenced in questions</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[I]</span>
+              <span>= Insertion points</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+            
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+                Questions:
+              </h3>
+              
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 1
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Relative clause or connector structure</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (1)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="A" id="q0_A" style="margin-right: 0.5rem;">
+                <label for="q0_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. where</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="B" id="q0_B" style="margin-right: 0.5rem;">
+                <label for="q0_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. whose</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="C" id="q0_C" style="margin-right: 0.5rem;">
+                <label for="q0_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. which</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="D" id="q0_D" style="margin-right: 0.5rem;">
+                <label for="q0_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. who</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 2
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Word form</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (2)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="A" id="q1_A" style="margin-right: 0.5rem;">
+                <label for="q1_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. assess</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="B" id="q1_B" style="margin-right: 0.5rem;">
+                <label for="q1_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. assessment</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="C" id="q1_C" style="margin-right: 0.5rem;">
+                <label for="q1_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. assessable</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="D" id="q1_D" style="margin-right: 0.5rem;">
+                <label for="q1_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. assessing</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 3
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Preposition or phrasal verb</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (3)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="A" id="q2_A" style="margin-right: 0.5rem;">
+                <label for="q2_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. on</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="B" id="q2_B" style="margin-right: 0.5rem;">
+                <label for="q2_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. at</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="C" id="q2_C" style="margin-right: 0.5rem;">
+                <label for="q2_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. into</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="D" id="q2_D" style="margin-right: 0.5rem;">
+                <label for="q2_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. for</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 4
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Preposition or phrasal verb</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (4)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="A" id="q3_A" style="margin-right: 0.5rem;">
+                <label for="q3_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. by</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="B" id="q3_B" style="margin-right: 0.5rem;">
+                <label for="q3_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. from</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="C" id="q3_C" style="margin-right: 0.5rem;">
+                <label for="q3_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. for</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="D" id="q3_D" style="margin-right: 0.5rem;">
+                <label for="q3_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. with</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 5
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Lexical choice appropriate to meaning</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (5)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="A" id="q4_A" style="margin-right: 0.5rem;">
+                <label for="q4_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. before</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="B" id="q4_B" style="margin-right: 0.5rem;">
+                <label for="q4_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. unless</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="C" id="q4_C" style="margin-right: 0.5rem;">
+                <label for="q4_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. while</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="D" id="q4_D" style="margin-right: 0.5rem;">
+                <label for="q4_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. after</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 6
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Verb pattern</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (6)</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="A" id="q5_A" style="margin-right: 0.5rem;">
+                <label for="q5_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. create</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="B" id="q5_B" style="margin-right: 0.5rem;">
+                <label for="q5_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. created</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="C" id="q5_C" style="margin-right: 0.5rem;">
+                <label for="q5_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. to create</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="D" id="q5_D" style="margin-right: 0.5rem;">
+                <label for="q5_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. creating</label>
+              </div>
+            
+        </div>
+      </div>
+    
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn">📝 Submit Quiz</button>
+            <button type="button" class="reset-btn" onclick="resetQuiz()">🔄 Reset</button>
+            <div id="results" class="results"></div>
+            <div id="detailedFeedback" class="detailed-feedback" style="display: none;"></div>
+          </div>
+        </form>
+
+        <div class="footer">
+          <p>Generated on 26/10/2025 at 22:41:57</p>
+          <p>Created by Text2TiengAnhTHPT - English Test Generator</p>
+        </div>
+      </div>
+
+      <script>
+        // Correct answers and question data
+        const correctAnswers = {"question_0": "C", "question_1": "A", "question_2": "C", "question_3": "B", "question_4": "A", "question_5": "C"};
+        const questionsData = {"question_0": {"questionNumber":1,"questionText":"Choose the best option for blank (1)","itemType":"Relative clause or connector structure","options":["A. where","B. whose","C. which","D. who"],"correctAnswerLetter":"C","explanation":"'Which' introduces a relative clause modifying 'urban areas', referring to things or places as a subject.","explanationVI":"'Which' dùng để mở đầu mệnh đề quan hệ bổ nghĩa cho 'urban areas', chỉ vật hoặc nơi chốn làm chủ ngữ."}, "question_1": {"questionNumber":2,"questionText":"Choose the best option for blank (2)","itemType":"Word form","options":["A. assess","B. assessment","C. assessable","D. assessing"],"correctAnswerLetter":"A","explanation":"The conjunction 'and' requires a parallel verb form to 'rank'. 'Assess' is the base form verb needed here.","explanationVI":"Liên từ 'and' yêu cầu một dạng động từ song song với 'rank'. 'Assess' là dạng động từ nguyên thể cần thiết ở đây."}, "question_2": {"questionNumber":3,"questionText":"Choose the best option for blank (3)","itemType":"Preposition or phrasal verb","options":["A. on","B. at","C. into","D. for"],"correctAnswerLetter":"C","explanation":"The collocation 'a glimpse into' means a brief look at or an insight into something.","explanationVI":"Cụm từ cố định 'a glimpse into' có nghĩa là một cái nhìn thoáng qua hoặc một cái nhìn sâu sắc về điều gì đó."}, "question_3": {"questionNumber":4,"questionText":"Choose the best option for blank (4)","itemType":"Preposition or phrasal verb","options":["A. by","B. from","C. for","D. with"],"correctAnswerLetter":"B","explanation":"The verb 'benefit' is commonly followed by the preposition 'from' when indicating the source of advantage.","explanationVI":"Động từ 'benefit' thường đi kèm với giới từ 'from' để chỉ nguồn gốc của lợi ích."}, "question_4": {"questionNumber":5,"questionText":"Choose the best option for blank (5)","itemType":"Lexical choice appropriate to meaning","options":["A. before","B. unless","C. while","D. after"],"correctAnswerLetter":"A","explanation":"The context implies experiencing ideas early, 'before' they become common, which best fits the meaning of 'groundbreaking ideas'.","explanationVI":"Ngữ cảnh ám chỉ việc trải nghiệm các ý tưởng từ sớm, 'before' (trước khi) chúng trở nên phổ biến, phù hợp nhất với ý nghĩa của 'groundbreaking ideas'."}, "question_5": {"questionNumber":6,"questionText":"Choose the best option for blank (6)","itemType":"Verb pattern","options":["A. create","B. created","C. to create","D. creating"],"correctAnswerLetter":"C","explanation":"The verb 'aim' is typically followed by an infinitive with 'to' (aim to do something) to express purpose.","explanationVI":"Động từ 'aim' thường được theo sau bởi động từ nguyên mẫu có 'to' (aim to do something) để diễn tả mục đích."}};
+        
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          let score = 0;
+          let totalQuestions = Object.keys(correctAnswers).length;
+          let userAnswers = {};
+          
+          // Get user answers
+          for (let [key, value] of formData.entries()) {
+            userAnswers[key] = value;
+          }
+          
+          // Check answers
+          for (let questionKey in correctAnswers) {
+            if (userAnswers[questionKey] === correctAnswers[questionKey]) {
+              score++;
+            }
+          }
+          
+          // Calculate percentage
+          const percentage = Math.round((score / totalQuestions) * 100);
+          
+          // Show results summary
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = `
+            <h3>Quiz Results</h3>
+            <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+            <p>Answered questions: ${Object.keys(userAnswers).length}/${totalQuestions}</p>
+          `;
+          
+          // Style based on performance
+          resultsDiv.className = 'results show ' + (percentage >= 70 ? 'passed' : 'failed');
+          
+          // Generate detailed feedback
+          generateDetailedFeedback(userAnswers);
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate detailed feedback function
+        function generateDetailedFeedback(userAnswers) {
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          let feedbackHTML = '<h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">Detailed Feedback:</h3>';
+          
+          for (let questionKey in questionsData) {
+            const questionData = questionsData[questionKey];
+            const userAnswer = userAnswers[questionKey];
+            const correctAnswer = correctAnswers[questionKey];
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedbackHTML += `
+              <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+                  Question ${questionData.questionNumber} 
+                  ${questionData.itemType ? `<span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">${questionData.itemType}</span>` : ''}
+                  ${isCorrect ? '<span style="margin-left: 0.5rem; color: rgb(22 163 74);">✔️ Correct</span>' : '<span style="margin-left: 0.5rem; color: rgb(220 38 38);">❌ Incorrect</span>'}
+                </p>
+            `;
+            
+            // Handle Part 3 scenarios
+            if (questionKey.startsWith('scenario_')) {
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.instructions}</p>
+                <div style="margin-bottom: 1rem; border: 1px solid rgb(229 231 235); background-color: rgb(249 250 251); padding: 0.75rem; border-radius: 0.25rem;">
+                  <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+                  ${questionData.jumbledItems.map(item => `<p style="font-size: 0.875rem; color: rgb(55 65 81);">${item}</p>`).join('')}
+                </div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Your Choice:</p>
+                <div style="margin-bottom: 0.5rem;">
+                  ${Object.entries(questionData.mcqOptions).map(([letter, sequence]) => {
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (letter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (letter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${letter}. ${sequence}</p>`;
+                  }).join('')}
+                </div>
+                <p style="font-size: 0.875rem; margin-top: 0.5rem;">Correct Sequence: <span style="font-weight: 600; color: rgb(21 128 61);">${questionData.correctSequence}</span></p>
+              `;
+            } else {
+              // Handle regular MCQ questions
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.questionText}</p>
+                <div style="margin-bottom: 0.75rem;">
+                  ${questionData.options.map((option, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const displayOption = option.match(/^[A-D][.)]s*/) ? option : `${optionLetter}. ${option}`;
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (optionLetter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (optionLetter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${displayOption}</p>`;
+                  }).join('')}
+                </div>
+              `;
+            }
+            
+            // Add explanations if available
+            if (questionData.explanation) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Explanation:</strong> ${questionData.explanation}</div>`;
+            }
+            if (questionData.explanationVI) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Giải thích:</strong> ${questionData.explanationVI}</div>`;
+            }
+            
+            feedbackHTML += '</div>';
+          }
+          
+          feedbackDiv.innerHTML = feedbackHTML;
+          feedbackDiv.style.display = 'block';
+        }
+        
+        // Reset function
+        function resetQuiz() {
+          document.getElementById('quizForm').reset();
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.className = 'results';
+          resultsDiv.innerHTML = '';
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          feedbackDiv.style.display = 'none';
+          feedbackDiv.innerHTML = '';
+        }
+        
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+          const formData = new FormData(document.getElementById('quizForm'));
+          if (formData.entries().next().value) {
+            e.preventDefault();
+            e.returnValue = '';
+          }
+        });
+      </script>
+    </body>
+    </html>
+  

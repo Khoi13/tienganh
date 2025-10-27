@@ -1,0 +1,575 @@
+
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz - Part 6</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9fafb;
+        }
+        .container {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          padding: 2rem;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid rgb(229 231 235);
+          padding-bottom: 1rem;
+        }
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .instructions {
+          background-color: rgb(254 249 195);
+          border: 1px solid rgb(251 191 36);
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .submit-section {
+          margin-top: 2rem;
+          text-align: center;
+          padding: 1rem;
+          background-color: rgb(249 250 251);
+          border-radius: 0.5rem;
+          border: 1px solid rgb(229 231 235);
+        }
+        .submit-btn {
+          background-color: rgb(34 197 94);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .submit-btn:hover {
+          background-color: rgb(21 128 61);
+        }
+        .reset-btn {
+          background-color: rgb(156 163 175);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: rgb(107 114 128);
+        }
+        .results {
+          margin-top: 1rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          text-align: center;
+          display: none;
+        }
+        .results.show {
+          display: block;
+        }
+        .results.passed {
+          background-color: rgb(240 253 244);
+          color: rgb(21 128 61);
+          border: 1px solid rgb(187 247 208);
+        }
+        .results.failed {
+          background-color: rgb(254 242 242);
+          color: rgb(220 38 38);
+          border: 1px solid rgb(254 202 202);
+        }
+        .detailed-feedback {
+          margin-top: 2rem;
+          text-align: left;
+        }
+        .feedback-item {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .feedback-item.correct {
+          background-color: rgb(240 253 244);
+          border: 1px solid rgb(187 247 208);
+        }
+        .feedback-item.incorrect {
+          background-color: rgb(254 242 242);
+          border: 1px solid rgb(254 202 202);
+        }
+        .option-correct {
+          color: rgb(21 128 61);
+          font-weight: 600;
+        }
+        .option-incorrect {
+          color: rgb(220 38 38);
+          text-decoration: line-through;
+        }
+        .option-normal {
+          color: rgb(55 65 81);
+        }
+        .footer {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgb(229 231 235);
+          text-align: center;
+          font-size: 0.875rem;
+          color: rgb(107 114 128);
+        }
+        @media (max-width: 768px) {
+          .grid-layout {
+            grid-template-columns: 1fr;
+          }
+          body {
+            padding: 10px;
+          }
+          .container {
+            padding: 1rem;
+          }
+        }
+        @media print {
+          body {
+            background-color: white;
+          }
+          .container {
+            box-shadow: none;
+          }
+          .submit-section {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="font-size: 1.875rem; font-weight: 700; color: rgb(79 70 229); margin-bottom: 0.5rem;">
+            Text2TiengAnhTHPT - Interactive Quiz
+          </h1>
+          <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+            Part 6
+          </h2>
+        </div>
+
+        <div class="instructions">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: rgb(146 64 14);">📋 Instructions</h3>
+          <p style="font-size: 0.875rem; color: rgb(146 64 14); margin: 0;">
+            • Read all questions carefully before answering<br>
+            • Choose the best answer for each question by clicking the radio button<br>
+            • Click "Submit Quiz" to see your results<br>
+            • You can reset and try again anytime
+          </p>
+        </div>
+
+        <form id="quizForm">
+          <div class="grid-layout">
+            
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+        📄 Reading Passage
+      </h3>
+      <div style="border: 2px solid rgb(229 231 235); background-color: rgb(255 255 255); border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); overflow: hidden;">
+        <div style="background-color: rgb(239 246 255); padding: 1rem; border-bottom: 1px solid rgb(191 219 254);">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(248 113 113); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(251 191 36); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <div style="width: 0.75rem; height: 0.75rem; background-color: rgb(34 197 94); border-radius: 9999px; margin-right: 0.5rem;"></div>
+            <span style="margin-left: 0.5rem; font-size: 0.875rem; font-weight: 500; color: rgb(75 85 99);">Reading Text</span>
+          </div>
+        </div>
+        <div style="padding: 1.5rem; background-color: rgb(239 246 255);">
+          <p style="margin-bottom: 1rem; font-size: 0.875rem; color: rgb(31 41 55); line-height: 1.625;">Embracing innovation can significantly enhance our daily lives. Just as cities like Seoul demonstrate, technology offers practical solutions to common challenges. From streamlined payment methods to advanced home security, smart systems can (35) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> our daily lives. Adopting digital tools, (36) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> for managing finances or accessing public transport, allows for greater efficiency. Imagine a world where you only need your phone to navigate a city or make purchases, freeing you from carrying (37) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span>. This shift not only simplifies individual tasks but also fosters a culture of progress. Encouraging (38) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> in the community to explore and utilize these advancements can lead to widespread benefits. By actively (39) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> with new technologies, we contribute to a more connected and efficient society, proving that innovation truly (40) <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span><span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);"></span> for everyone.</p>
+        </div>
+        <div style="background-color: rgb(249 250 251); padding: 1rem; border-top: 1px solid rgb(229 231 235); font-size: 0.75rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; color: rgb(75 85 99);">
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; text-decoration: underline; background-color: rgb(254 249 195); padding: 0.25rem; border-radius: 0.25rem; color: rgb(17 24 39);">highlighted</span>
+              <span>= Referenced in questions</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 700; color: rgb(37 99 235); background-color: rgb(239 246 255); padding: 0.25rem; border-radius: 0.25rem;">[I]</span>
+              <span>= Insertion points</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+            
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">
+                Questions:
+              </h3>
+              
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 35
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Collocation</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (35).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="A" id="q0_A" style="margin-right: 0.5rem;">
+                <label for="q0_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. take easier</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="B" id="q0_B" style="margin-right: 0.5rem;">
+                <label for="q0_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. do easier</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="C" id="q0_C" style="margin-right: 0.5rem;">
+                <label for="q0_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. make easier</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_0" value="D" id="q0_D" style="margin-right: 0.5rem;">
+                <label for="q0_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. bring easier</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 36
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Linking word or coordinating conjunction</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (36).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="A" id="q1_A" style="margin-right: 0.5rem;">
+                <label for="q1_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. therefore</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="B" id="q1_B" style="margin-right: 0.5rem;">
+                <label for="q1_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. despite</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="C" id="q1_C" style="margin-right: 0.5rem;">
+                <label for="q1_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. however</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_1" value="D" id="q1_D" style="margin-right: 0.5rem;">
+                <label for="q1_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. whether</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 37
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Noun phrase ordering</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (37).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="A" id="q2_A" style="margin-right: 0.5rem;">
+                <label for="q2_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. physical items valuable</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="B" id="q2_B" style="margin-right: 0.5rem;">
+                <label for="q2_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. items valuable physical</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="C" id="q2_C" style="margin-right: 0.5rem;">
+                <label for="q2_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. valuable physical items</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_2" value="D" id="q2_D" style="margin-right: 0.5rem;">
+                <label for="q2_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. physical valuable items</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 38
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Determiner / reference word</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (38).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="A" id="q3_A" style="margin-right: 0.5rem;">
+                <label for="q3_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. the other</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="B" id="q3_B" style="margin-right: 0.5rem;">
+                <label for="q3_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. others</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="C" id="q3_C" style="margin-right: 0.5rem;">
+                <label for="q3_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. other</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_3" value="D" id="q3_D" style="margin-right: 0.5rem;">
+                <label for="q3_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. another</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 39
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Verb choice based on meaning</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (39).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="A" id="q4_A" style="margin-right: 0.5rem;">
+                <label for="q4_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. delaying</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="B" id="q4_B" style="margin-right: 0.5rem;">
+                <label for="q4_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. avoiding</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="C" id="q4_C" style="margin-right: 0.5rem;">
+                <label for="q4_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. engaging</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_4" value="D" id="q4_D" style="margin-right: 0.5rem;">
+                <label for="q4_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. comparing</label>
+              </div>
+            
+        </div>
+      </div>
+    
+      <div style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid rgb(229 231 235); border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); background-color: rgb(255 255 255);">
+        <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+          Question 40
+          <span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">Fixed expression / idiomatic usage</span>
+        </p>
+        <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">Choose the best option for blank (40).</p>
+        <div style="margin-bottom: 1rem;">
+          
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="A" id="q5_A" style="margin-right: 0.5rem;">
+                <label for="q5_A" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">A. shows potential</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="B" id="q5_B" style="margin-right: 0.5rem;">
+                <label for="q5_B" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">B. works wonders</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="C" id="q5_C" style="margin-right: 0.5rem;">
+                <label for="q5_C" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">C. makes progress</label>
+              </div>
+            
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <input type="radio" name="question_5" value="D" id="q5_D" style="margin-right: 0.5rem;">
+                <label for="q5_D" style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); cursor: pointer;">D. holds value</label>
+              </div>
+            
+        </div>
+      </div>
+    
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn">📝 Submit Quiz</button>
+            <button type="button" class="reset-btn" onclick="resetQuiz()">🔄 Reset</button>
+            <div id="results" class="results"></div>
+            <div id="detailedFeedback" class="detailed-feedback" style="display: none;"></div>
+          </div>
+        </form>
+
+        <div class="footer">
+          <p>Generated on 26/10/2025 at 22:54:18</p>
+          <p>Created by Text2TiengAnhTHPT - English Test Generator</p>
+        </div>
+      </div>
+
+      <script>
+        // Correct answers and question data
+        const correctAnswers = {"question_0": "C", "question_1": "D", "question_2": "C", "question_3": "B", "question_4": "C", "question_5": "B"};
+        const questionsData = {"question_0": {"questionNumber":35,"questionText":"Choose the best option for blank (35).","itemType":"Collocation","options":["A. take easier","B. do easier","C. make easier","D. bring easier"],"correctAnswerLetter":"C","explanation":"The collocation 'make easier' means to simplify or reduce difficulty. It fits the context of smart systems simplifying daily lives.","explanationVI":"Cụm từ cố định 'make easier' có nghĩa là làm cho điều gì đó trở nên đơn giản hoặc ít khó khăn hơn. Nó phù hợp với ngữ cảnh các hệ thống thông minh giúp cuộc sống hàng ngày dễ dàng hơn."}, "question_1": {"questionNumber":36,"questionText":"Choose the best option for blank (36).","itemType":"Linking word or coordinating conjunction","options":["A. therefore","B. despite","C. however","D. whether"],"correctAnswerLetter":"D","explanation":"'Whether... or...' is used to introduce alternatives or possibilities, fitting the context of managing finances or accessing public transport.","explanationVI":"'Whether... or...' được dùng để giới thiệu các lựa chọn hoặc khả năng, phù hợp với ngữ cảnh quản lý tài chính hoặc sử dụng phương tiện giao thông công cộng."}, "question_2": {"questionNumber":37,"questionText":"Choose the best option for blank (37).","itemType":"Noun phrase ordering","options":["A. physical items valuable","B. items valuable physical","C. valuable physical items","D. physical valuable items"],"correctAnswerLetter":"C","explanation":"The correct order for adjectives is typically opinion/value (valuable) followed by a more descriptive characteristic (physical) before the noun (items).","explanationVI":"Thứ tự tính từ thường là tính từ chỉ quan điểm/giá trị (valuable) đứng trước tính từ mô tả đặc tính (physical), sau đó đến danh từ (items)."}, "question_3": {"questionNumber":38,"questionText":"Choose the best option for blank (38).","itemType":"Determiner / reference word","options":["A. the other","B. others","C. other","D. another"],"correctAnswerLetter":"B","explanation":"'Others' is a pronoun referring to other people in general, fitting the context of encouraging people in the community.","explanationVI":"'Others' là đại từ chỉ 'những người khác' một cách chung chung, phù hợp với ngữ cảnh khuyến khích mọi người trong cộng đồng."}, "question_4": {"questionNumber":39,"questionText":"Choose the best option for blank (39).","itemType":"Verb choice based on meaning","options":["A. delaying","B. avoiding","C. engaging","D. comparing"],"correctAnswerLetter":"C","explanation":"'Engaging with' means to interact or get involved with something, which is appropriate for actively using new technologies.","explanationVI":"'Engaging with' có nghĩa là tương tác hoặc tham gia vào điều gì đó, phù hợp với việc tích cực sử dụng công nghệ mới."}, "question_5": {"questionNumber":40,"questionText":"Choose the best option for blank (40).","itemType":"Fixed expression / idiomatic usage","options":["A. shows potential","B. works wonders","C. makes progress","D. holds value"],"correctAnswerLetter":"B","explanation":"'Work wonders' is an idiom meaning to be extremely effective or successful, which perfectly conveys the positive impact of innovation.","explanationVI":"'Work wonders' là một thành ngữ có nghĩa là cực kỳ hiệu quả hoặc thành công, diễn tả hoàn hảo tác động tích cực của sự đổi mới."}};
+        
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          let score = 0;
+          let totalQuestions = Object.keys(correctAnswers).length;
+          let userAnswers = {};
+          
+          // Get user answers
+          for (let [key, value] of formData.entries()) {
+            userAnswers[key] = value;
+          }
+          
+          // Check answers
+          for (let questionKey in correctAnswers) {
+            if (userAnswers[questionKey] === correctAnswers[questionKey]) {
+              score++;
+            }
+          }
+          
+          // Calculate percentage
+          const percentage = Math.round((score / totalQuestions) * 100);
+          
+          // Show results summary
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = `
+            <h3>Quiz Results</h3>
+            <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+            <p>Answered questions: ${Object.keys(userAnswers).length}/${totalQuestions}</p>
+          `;
+          
+          // Style based on performance
+          resultsDiv.className = 'results show ' + (percentage >= 70 ? 'passed' : 'failed');
+          
+          // Generate detailed feedback
+          generateDetailedFeedback(userAnswers);
+          
+          // Scroll to results
+          resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate detailed feedback function
+        function generateDetailedFeedback(userAnswers) {
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          let feedbackHTML = '<h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: rgb(31 41 55);">Detailed Feedback:</h3>';
+          
+          for (let questionKey in questionsData) {
+            const questionData = questionsData[questionKey];
+            const userAnswer = userAnswers[questionKey];
+            const correctAnswer = correctAnswers[questionKey];
+            const isCorrect = userAnswer === correctAnswer;
+            
+            feedbackHTML += `
+              <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <p style="font-size: 0.875rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.5rem;">
+                  Question ${questionData.questionNumber} 
+                  ${questionData.itemType ? `<span style="margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: rgb(219 234 254); color: rgb(29 78 216); font-size: 0.75rem; border-radius: 9999px;">${questionData.itemType}</span>` : ''}
+                  ${isCorrect ? '<span style="margin-left: 0.5rem; color: rgb(22 163 74);">✔️ Correct</span>' : '<span style="margin-left: 0.5rem; color: rgb(220 38 38);">❌ Incorrect</span>'}
+                </p>
+            `;
+            
+            // Handle Part 3 scenarios
+            if (questionKey.startsWith('scenario_')) {
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.instructions}</p>
+                <div style="margin-bottom: 1rem; border: 1px solid rgb(229 231 235); background-color: rgb(249 250 251); padding: 0.75rem; border-radius: 0.25rem;">
+                  <p style="font-size: 0.75rem; font-weight: 600; color: rgb(107 114 128); margin-bottom: 0.25rem;">Original Items:</p>
+                  ${questionData.jumbledItems.map(item => `<p style="font-size: 0.875rem; color: rgb(55 65 81);">${item}</p>`).join('')}
+                </div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: rgb(55 65 81); margin-bottom: 0.5rem;">Your Choice:</p>
+                <div style="margin-bottom: 0.5rem;">
+                  ${Object.entries(questionData.mcqOptions).map(([letter, sequence]) => {
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (letter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (letter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${letter}. ${sequence}</p>`;
+                  }).join('')}
+                </div>
+                <p style="font-size: 0.875rem; margin-top: 0.5rem;">Correct Sequence: <span style="font-weight: 600; color: rgb(21 128 61);">${questionData.correctSequence}</span></p>
+              `;
+            } else {
+              // Handle regular MCQ questions
+              feedbackHTML += `
+                <p style="font-size: 1rem; color: rgb(31 41 55); margin-bottom: 0.75rem;">${questionData.questionText}</p>
+                <div style="margin-bottom: 0.75rem;">
+                  ${questionData.options.map((option, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const displayOption = option.match(/^[A-D][.)]s*/) ? option : `${optionLetter}. ${option}`;
+                    let optionClass = 'option-normal';
+                    let prefix = '';
+                    if (optionLetter === correctAnswer) {
+                      optionClass = 'option-correct';
+                      prefix = '✔ ';
+                    } else if (optionLetter === userAnswer && userAnswer !== correctAnswer) {
+                      optionClass = 'option-incorrect';
+                      prefix = '❯ ';
+                    }
+                    return `<p class="${optionClass}" style="margin-bottom: 0.25rem;">${prefix}${displayOption}</p>`;
+                  }).join('')}
+                </div>
+              `;
+            }
+            
+            // Add explanations if available
+            if (questionData.explanation) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Explanation:</strong> ${questionData.explanation}</div>`;
+            }
+            if (questionData.explanationVI) {
+              feedbackHTML += `<div style="margin-top: 0.5rem; padding: 0.5rem; background-color: rgb(243 244 246); border: 1px solid rgb(229 231 235); border-radius: 0.25rem; font-size: 0.875rem; color: rgb(55 65 81);"><strong>Giải thích:</strong> ${questionData.explanationVI}</div>`;
+            }
+            
+            feedbackHTML += '</div>';
+          }
+          
+          feedbackDiv.innerHTML = feedbackHTML;
+          feedbackDiv.style.display = 'block';
+        }
+        
+        // Reset function
+        function resetQuiz() {
+          document.getElementById('quizForm').reset();
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.className = 'results';
+          resultsDiv.innerHTML = '';
+          const feedbackDiv = document.getElementById('detailedFeedback');
+          feedbackDiv.style.display = 'none';
+          feedbackDiv.innerHTML = '';
+        }
+        
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+          const formData = new FormData(document.getElementById('quizForm'));
+          if (formData.entries().next().value) {
+            e.preventDefault();
+            e.returnValue = '';
+          }
+        });
+      </script>
+    </body>
+    </html>
+  
